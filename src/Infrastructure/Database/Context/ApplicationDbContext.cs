@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database.Context
 {
     public class ApplicationDbContext : DbContext
     {
+        public DbSet<Specialization> Specializations { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
