@@ -9,6 +9,7 @@ namespace Infrastructure.Database.Context
         public DbSet<BookingStatus> BookingStatus { get; set; }
         public DbSet<AppointmentDays> AppointmentDays { get; set; }
         public DbSet<AppointmentTimes> AppointmentTimes { get; set; }
+        public DbSet<Times> Times { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
