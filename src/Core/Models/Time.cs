@@ -1,8 +1,8 @@
 ﻿namespace Core.Models
 {
-    public class Times
+    public class Time
     {
         public int Id { get; set; }
-        public string Time { get; set; }
+        public string TimeValue { get; set; }
     }
 }
