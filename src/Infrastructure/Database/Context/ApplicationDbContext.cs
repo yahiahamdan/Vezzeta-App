@@ -7,6 +7,7 @@ namespace Infrastructure.Database.Context
     {
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<BookingStatus> BookingStatus { get; set; }
+        public DbSet<AppointmentDays> AppointmentDays { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
