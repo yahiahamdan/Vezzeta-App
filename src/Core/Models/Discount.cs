@@ -7,5 +7,7 @@
         public bool IsActivated { get; set; }
         public int DiscountValue { get; set; }
         public Booking Booking { get; set; }
+        public DiscountType DiscountType { get; set; }
+        public int DiscountTypeId { get; set; }
     }
 }
