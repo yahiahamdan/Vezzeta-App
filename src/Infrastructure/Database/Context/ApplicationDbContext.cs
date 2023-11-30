@@ -16,6 +16,7 @@ namespace Infrastructure.Database.Context
         public DbSet<DiscountType> DiscountTypes { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<ExaminationPrice> ExaminationPrices { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
