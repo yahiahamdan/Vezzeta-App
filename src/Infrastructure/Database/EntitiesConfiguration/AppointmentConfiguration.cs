@@ -12,6 +12,11 @@ namespace Infrastructure.Database.EntitiesConfiguration
                 .HasOne(appointment => appointment.Day)
                 .WithMany(day => day.Appointments)
                 .HasForeignKey(appointment => appointment.DayId);
+
+            builder
+                .HasOne(appointment => appointment.Doctor)
+                .WithMany(doctor => doctor.Appointments)
+                .HasForeignKey(appointment => appointment.DoctorId);
         }
     }
 }
