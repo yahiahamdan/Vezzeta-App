@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using Infrastructure.Database.EntitiesConfiguration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,12 +15,14 @@ namespace Infrastructure.Database.Context
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<DiscountType> DiscountTypes { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<ExaminationPrice> ExaminationPrices { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration<ExaminationPrice>(new ExaminationPriceConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }

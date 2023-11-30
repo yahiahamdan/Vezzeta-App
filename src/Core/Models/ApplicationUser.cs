@@ -9,5 +9,6 @@ namespace Core.Models
         public string Gender { get; set; }
         public string DateOfBirth { get; set; }
         public string? Image { get; set; }
+        public ExaminationPrice ExaminationPrice { get; set; }
     }
 }
