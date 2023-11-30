@@ -8,12 +8,12 @@ namespace Infrastructure.Database.EntitiesConfiguration
     {
         public void Configure(EntityTypeBuilder<ExaminationPrice> builder)
         {
-            builder.HasKey(e => e.DoctorId);
+            builder.HasKey(examinationPrice => examinationPrice.DoctorId);
 
             builder
-                .HasOne(e => e.Doctor)
-                .WithOne(d => d.ExaminationPrice)
-                .HasForeignKey<ExaminationPrice>(ex => ex.DoctorId);
+                .HasOne(examinationPrice => examinationPrice.Doctor)
+                .WithOne(doctor => doctor.ExaminationPrice)
+                .HasForeignKey<ExaminationPrice>(examinationPrice => examinationPrice.DoctorId);
         }
     }
 }

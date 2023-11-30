@@ -10,5 +10,6 @@ namespace Core.Models
         public string DateOfBirth { get; set; }
         public string? Image { get; set; }
         public ExaminationPrice ExaminationPrice { get; set; }
+        public UserBookingTracking UserBookingTracking { get; set; }
     }
 }

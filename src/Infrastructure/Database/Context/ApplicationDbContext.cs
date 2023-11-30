@@ -17,6 +17,7 @@ namespace Infrastructure.Database.Context
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<ExaminationPrice> ExaminationPrices { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<UserBookingTracking> UserBookingTrackings { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
@@ -24,6 +25,9 @@ namespace Infrastructure.Database.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration<ExaminationPrice>(new ExaminationPriceConfiguration());
+            modelBuilder.ApplyConfiguration<UserBookingTracking>(
+                new UserBookingTrackingConfiguration()
+            );
             base.OnModelCreating(modelBuilder);
         }
     }
