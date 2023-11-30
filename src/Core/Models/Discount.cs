@@ -6,5 +6,6 @@
         public string DiscountCode { get; set; }
         public bool IsActivated { get; set; }
         public int DiscountValue { get; set; }
+        public Booking Booking { get; set; }
     }
 }

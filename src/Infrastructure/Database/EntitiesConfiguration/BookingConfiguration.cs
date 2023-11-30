@@ -12,6 +12,11 @@ namespace Infrastructure.Database.EntitiesConfiguration
                 .HasOne(booking => booking.BookingStatus)
                 .WithMany(bookingStatus => bookingStatus.Bookings)
                 .HasForeignKey(booking => booking.StatusId);
+
+            builder
+                .HasOne(booking => booking.Discount)
+                .WithOne(discount => discount.Booking)
+                .HasForeignKey<Booking>(booking => booking.DiscountId);
         }
     }
 }
