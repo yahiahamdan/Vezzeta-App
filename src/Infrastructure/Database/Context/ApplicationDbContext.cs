@@ -1,9 +1,10 @@
 ﻿using Core.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database.Context
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<BookingStatus> BookingStatus { get; set; }
