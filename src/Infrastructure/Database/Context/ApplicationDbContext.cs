@@ -9,7 +9,7 @@ namespace Infrastructure.Database.Context
     {
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<BookingStatus> BookingStatus { get; set; }
-        public DbSet<AppointmentDay> AppointmentDays { get; set; }
+        public DbSet<Day> Days { get; set; }
         public DbSet<AppointmentTime> AppointmentTimes { get; set; }
         public DbSet<Time> Times { get; set; }
         public DbSet<Discount> Discounts { get; set; }
@@ -26,6 +26,7 @@ namespace Infrastructure.Database.Context
         {
             modelBuilder.ApplyConfiguration<ExaminationPrice>(new ExaminationPriceConfiguration());
             modelBuilder.ApplyConfiguration<Booking>(new BookingConfiguration());
+            modelBuilder.ApplyConfiguration<Appointment>(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration<UserBookingTracking>(
                 new UserBookingTrackingConfiguration()
             );

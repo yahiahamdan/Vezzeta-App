@@ -4,6 +4,7 @@ using Infrastructure.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231130131036_RemoveDayIdFromBookingsAndAppointmentsEntities")]
+    partial class RemoveDayIdFromBookingsAndAppointmentsEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,14 +117,26 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DayId")
+                    b.HasKey("Id");
+
+                    b.ToTable("Appointments");
+                });
+
+            modelBuilder.Entity("Core.Models.AppointmentDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DayId");
-
-                    b.ToTable("Appointments");
+                    b.ToTable("AppointmentDays");
                 });
 
             modelBuilder.Entity("Core.Models.AppointmentTime", b =>
@@ -154,9 +169,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DayId")
-                        .HasColumnType("int");
-
                     b.Property<int>("FinalPrice")
                         .HasColumnType("int");
 
@@ -167,8 +179,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DayId");
 
                     b.HasIndex("StatusId");
 
@@ -190,23 +200,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BookingStatus");
-                });
-
-            modelBuilder.Entity("Core.Models.Day", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Days");
                 });
 
             modelBuilder.Entity("Core.Models.Discount", b =>
@@ -443,25 +436,8 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Models.Appointment", b =>
-                {
-                    b.HasOne("Core.Models.Day", "Day")
-                        .WithMany("Appointments")
-                        .HasForeignKey("DayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Day");
-                });
-
             modelBuilder.Entity("Core.Models.Booking", b =>
                 {
-                    b.HasOne("Core.Models.Day", "Day")
-                        .WithMany("Bookings")
-                        .HasForeignKey("DayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Core.Models.BookingStatus", "BookingStatus")
                         .WithMany("Bookings")
                         .HasForeignKey("StatusId")
@@ -469,8 +445,6 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("BookingStatus");
-
-                    b.Navigation("Day");
                 });
 
             modelBuilder.Entity("Core.Models.ExaminationPrice", b =>
@@ -557,13 +531,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Models.BookingStatus", b =>
                 {
-                    b.Navigation("Bookings");
-                });
-
-            modelBuilder.Entity("Core.Models.Day", b =>
-                {
-                    b.Navigation("Appointments");
-
                     b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618

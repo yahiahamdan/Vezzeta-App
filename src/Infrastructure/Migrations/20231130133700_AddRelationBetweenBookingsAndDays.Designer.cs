@@ -4,6 +4,7 @@ using Infrastructure.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231130133700_AddRelationBetweenBookingsAndDays")]
+    partial class AddRelationBetweenBookingsAndDays
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,12 +117,7 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DayId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("DayId");
 
                     b.ToTable("Appointments");
                 });
@@ -443,17 +441,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Models.Appointment", b =>
-                {
-                    b.HasOne("Core.Models.Day", "Day")
-                        .WithMany("Appointments")
-                        .HasForeignKey("DayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Day");
-                });
-
             modelBuilder.Entity("Core.Models.Booking", b =>
                 {
                     b.HasOne("Core.Models.Day", "Day")
@@ -562,8 +549,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Models.Day", b =>
                 {
-                    b.Navigation("Appointments");
-
                     b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
