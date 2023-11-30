@@ -4,6 +4,7 @@ using Infrastructure.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231130150536_AddRelationBetweenAppointmentsAndAppointmentTimes")]
+    partial class AddRelationBetweenAppointmentsAndAppointmentTimes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,14 +147,9 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("IsBooked")
                         .HasColumnType("bit");
 
-                    b.Property<int>("TimeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AppointmentId");
-
-                    b.HasIndex("TimeId");
 
                     b.ToTable("AppointmentTimes");
                 });
@@ -481,15 +479,7 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Models.Time", "Time")
-                        .WithMany("AppointmentTimes")
-                        .HasForeignKey("TimeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Appointment");
-
-                    b.Navigation("Time");
                 });
 
             modelBuilder.Entity("Core.Models.Booking", b =>
@@ -600,11 +590,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Models.Day", b =>
                 {
                     b.Navigation("Appointments");
-                });
-
-            modelBuilder.Entity("Core.Models.Time", b =>
-                {
-                    b.Navigation("AppointmentTimes");
                 });
 #pragma warning restore 612, 618
         }
