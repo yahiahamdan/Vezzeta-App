@@ -9,5 +9,7 @@
         public int FinalPrice { get; set; }
         public int StatusId { get; set; }
         public BookingStatus BookingStatus { get; set; }
+        public AppointmentDay AppointmentDay { get; set; }
+        public int DayId { get; set; }
     }
 }
