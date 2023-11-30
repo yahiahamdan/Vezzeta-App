@@ -120,7 +120,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentDays");
+                    b.ToTable("AppointmentDays", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.AppointmentTimes", b =>
@@ -136,7 +136,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentTimes");
+                    b.ToTable("AppointmentTimes", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.Booking", b =>
@@ -161,7 +161,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.BookingStatus", b =>
@@ -178,7 +178,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BookingStatus");
+                    b.ToTable("BookingStatus", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.Discount", b =>
@@ -201,7 +201,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Discounts");
+                    b.ToTable("Discounts", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.DiscountType", b =>
@@ -218,7 +218,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DiscountTypes");
+                    b.ToTable("DiscountTypes", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.ExaminationPrice", b =>
@@ -232,7 +232,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("DoctorId");
 
-                    b.ToTable("ExaminationPrices");
+                    b.ToTable("ExaminationPrices", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.Specialization", b =>
@@ -249,7 +249,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Specializations");
+                    b.ToTable("Specializations", (string)null);
                 });
 
             modelBuilder.Entity("Core.Models.Time", b =>
@@ -266,7 +266,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Times");
+                    b.ToTable("Times", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

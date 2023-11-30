@@ -9,8 +9,8 @@ namespace Infrastructure.Database.Context
     {
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<BookingStatus> BookingStatus { get; set; }
-        public DbSet<AppointmentDays> AppointmentDays { get; set; }
-        public DbSet<AppointmentTimes> AppointmentTimes { get; set; }
+        public DbSet<AppointmentDay> AppointmentDays { get; set; }
+        public DbSet<AppointmentTime> AppointmentTimes { get; set; }
         public DbSet<Time> Times { get; set; }
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<DiscountType> DiscountTypes { get; set; }

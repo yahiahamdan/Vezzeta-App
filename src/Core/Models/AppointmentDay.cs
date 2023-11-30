@@ -1,8 +1,8 @@
 ﻿namespace Core.Models
 {
-    public class AppointmentTimes
+    public class AppointmentDay
     {
         public int Id { get; set; }
-        public bool IsBooked { get; set; }
+        public string Day { get; set; }
     }
 }
