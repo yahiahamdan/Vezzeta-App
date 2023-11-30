@@ -114,12 +114,7 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DayId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("DayId");
 
                     b.ToTable("Appointments");
                 });
@@ -443,17 +438,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Models.Appointment", b =>
-                {
-                    b.HasOne("Core.Models.AppointmentDay", "AppointmentDay")
-                        .WithMany("Appointments")
-                        .HasForeignKey("DayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppointmentDay");
-                });
-
             modelBuilder.Entity("Core.Models.Booking", b =>
                 {
                     b.HasOne("Core.Models.AppointmentDay", "AppointmentDay")
@@ -557,8 +541,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Models.AppointmentDay", b =>
                 {
-                    b.Navigation("Appointments");
-
                     b.Navigation("Bookings");
                 });
 

@@ -26,7 +26,6 @@ namespace Infrastructure.Database.Context
         {
             modelBuilder.ApplyConfiguration<ExaminationPrice>(new ExaminationPriceConfiguration());
             modelBuilder.ApplyConfiguration<Booking>(new BookingConfiguration());
-            modelBuilder.ApplyConfiguration<Appointment>(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration<UserBookingTracking>(
                 new UserBookingTrackingConfiguration()
             );
