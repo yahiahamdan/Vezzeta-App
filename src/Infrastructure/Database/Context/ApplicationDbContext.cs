@@ -11,6 +11,7 @@ namespace Infrastructure.Database.Context
         public DbSet<AppointmentDays> AppointmentDays { get; set; }
         public DbSet<AppointmentTimes> AppointmentTimes { get; set; }
         public DbSet<Time> Times { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
