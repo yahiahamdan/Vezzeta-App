@@ -11,5 +11,7 @@
         public BookingStatus BookingStatus { get; set; }
         public Discount Discount { get; set; }
         public int? DiscountId { get; set; }
+        public AppointmentTime AppointmentTime { get; set; }
+        public int AppointmentTimeId { get; set; }
     }
 }

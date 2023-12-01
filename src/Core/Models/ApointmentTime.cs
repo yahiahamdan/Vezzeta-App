@@ -8,5 +8,6 @@
         public int AppointmentId { get; set; }
         public Time Time { get; set; }
         public int TimeId { get; set; }
+        public Booking Booking { get; set; }
     }
 }
