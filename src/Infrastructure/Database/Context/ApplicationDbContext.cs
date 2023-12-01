@@ -29,6 +29,7 @@ namespace Infrastructure.Database.Context
             modelBuilder.ApplyConfiguration<Appointment>(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration<AppointmentTime>(new AppointmentTimeConfiguration());
             modelBuilder.ApplyConfiguration<Discount>(new DiscountConfiguration());
+            modelBuilder.ApplyConfiguration<ApplicationUser>(new ApplicationUserConfiguration());
             modelBuilder.ApplyConfiguration<UserBookingTracking>(
                 new UserBookingTrackingConfiguration()
             );
