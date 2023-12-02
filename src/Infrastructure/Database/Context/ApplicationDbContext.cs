@@ -32,6 +32,7 @@ namespace Infrastructure.Database.Context
             modelBuilder.ApplyConfiguration<DiscountType>(new DiscountTypeConfiguration());
             modelBuilder.ApplyConfiguration<ApplicationUser>(new ApplicationUserConfiguration());
             modelBuilder.ApplyConfiguration<BookingStatus>(new BookingStatusConfiguration());
+            modelBuilder.ApplyConfiguration<Specialization>(new SpecializationConfiguration());
             modelBuilder.ApplyConfiguration<Time>(new TimeConfiguration());
             modelBuilder.ApplyConfiguration<Day>(new DayConfiguration());
             modelBuilder.ApplyConfiguration<UserBookingTracking>(
