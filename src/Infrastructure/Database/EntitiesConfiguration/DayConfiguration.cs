@@ -9,11 +9,7 @@ namespace Infrastructure.Database.EntitiesConfiguration
     {
         public void Configure(EntityTypeBuilder<Day> builder)
         {
-            builder
-                .Property(property => property.Name)
-                .HasMaxLength(9)
-                .HasConversion<string>()
-                .IsRequired();
+            builder.Property(property => property.Name).HasMaxLength(9).HasConversion<string>();
 
             var weekDays = Enum.GetNames(typeof(WeekDaysEnum)).Select(day => $"'{day}'");
             var inClause = string.Join(", ", weekDays);
