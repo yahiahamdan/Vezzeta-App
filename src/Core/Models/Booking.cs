@@ -13,5 +13,7 @@
         public int? DiscountId { get; set; }
         public AppointmentTime AppointmentTime { get; set; }
         public int AppointmentTimeId { get; set; }
+        public ApplicationUser Patient { get; set; }
+        public string PatientId { get; set; }
     }
 }

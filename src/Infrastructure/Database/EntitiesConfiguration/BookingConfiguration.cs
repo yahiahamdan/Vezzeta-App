@@ -24,6 +24,12 @@ namespace Infrastructure.Database.EntitiesConfiguration
                 .HasOne(booking => booking.AppointmentTime)
                 .WithOne(appointmentTime => appointmentTime.Booking)
                 .HasForeignKey<Booking>(booking => booking.AppointmentTimeId);
+
+            builder
+                .HasOne(booking => booking.Patient)
+                .WithMany(patient => patient.Bookings)
+                .HasForeignKey(booking => booking.PatientId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

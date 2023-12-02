@@ -19,5 +19,6 @@ namespace Core.Models
         public ICollection<Appointment> Appointments { get; set; }
         public Specialization Specialization { get; set; }
         public int SpecializationId { get; set; }
+        public ICollection<Booking> Bookings { get; set; }
     }
 }
