@@ -8,7 +8,7 @@ namespace Infrastructure.Database.EntitiesConfiguration
     {
         public void Configure(EntityTypeBuilder<Booking> builder)
         {
-            builder.Property(property => property.CreatedAt).HasDefaultValueSql("GETDATE()");
+            builder.Property(property => property.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
 
             builder
                 .HasOne(booking => booking.BookingStatus)
