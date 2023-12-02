@@ -10,7 +10,7 @@ namespace Infrastructure.Database.EntitiesConfiguration
         {
             builder.HasIndex(property => property.TimeValue).IsUnique();
 
-            builder.Property(property => property.TimeValue).HasMaxLength(15).IsRequired();
+            builder.Property(property => property.TimeValue).HasMaxLength(15);
         }
     }
 }
