@@ -8,6 +8,8 @@ namespace Infrastructure.Database.EntitiesConfiguration
     {
         public void Configure(EntityTypeBuilder<Booking> builder)
         {
+            builder.Property(property => property.CreatedAt).HasDefaultValueSql("GETDATE()");
+
             builder
                 .HasOne(booking => booking.BookingStatus)
                 .WithMany(bookingStatus => bookingStatus.Bookings)
