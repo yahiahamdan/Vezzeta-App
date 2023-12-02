@@ -1,9 +1,11 @@
-﻿namespace Core.Models
+﻿using Core.Enums;
+
+namespace Core.Models
 {
     public class BookingStatus
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public BookingStatusEnum Name { get; set; }
         public ICollection<Booking> Bookings { get; set; }
     }
 }
