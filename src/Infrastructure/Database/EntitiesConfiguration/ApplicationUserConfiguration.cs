@@ -16,7 +16,6 @@ namespace Infrastructure.Database.EntitiesConfiguration
             builder.Property(property => property.PasswordHash).HasMaxLength(32).IsRequired();
             builder.Property(property => property.DateOfBirth).HasMaxLength(15);
             builder.Property(property => property.Gender).HasConversion<string>();
-            builder.Property(property => property.SpecializationId).Metadata.SetDefaultValue(false);
 
             builder
                 .HasOne(doctor => doctor.Specialization)
