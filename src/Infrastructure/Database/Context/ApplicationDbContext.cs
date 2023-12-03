@@ -1,5 +1,9 @@
-﻿using Core.Models;
+﻿// Ignore Spelling: Trackings
+
+using Core.Models;
+using Infrastructure.Database.Data;
 using Infrastructure.Database.EntitiesConfiguration;
+using Infrastructure.Database.Seeding;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +42,18 @@ namespace Infrastructure.Database.Context
             modelBuilder.ApplyConfiguration<UserBookingTracking>(
                 new UserBookingTrackingConfiguration()
             );
+
+            // Database Seeding
+            modelBuilder.ApplyConfiguration<BookingStatus>(
+                new DatabaseSeeding<BookingStatus>(BookingStatusSeeding.SeedBookingStatusEntity())
+            );
+            modelBuilder.ApplyConfiguration<Day>(
+                new DatabaseSeeding<Day>(DaysSeeding.SeedWeekDays())
+            );
+            modelBuilder.ApplyConfiguration<ApplicationUser>(
+                new DatabaseSeeding<ApplicationUser>(AspNetUsersSeeding.SeedUsers())
+            );
+
             base.OnModelCreating(modelBuilder);
         }
     }

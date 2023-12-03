@@ -1,4 +1,6 @@
-﻿namespace Core.Enums
+﻿// Ignore Spelling: Enums
+
+namespace Core.Enums
 {
     public enum DiscountTypesEnum
     {

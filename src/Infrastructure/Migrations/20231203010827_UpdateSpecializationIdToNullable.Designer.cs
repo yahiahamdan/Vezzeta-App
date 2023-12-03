@@ -4,6 +4,7 @@ using Infrastructure.Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231203010827_UpdateSpecializationIdToNullable")]
+    partial class UpdateSpecializationIdToNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,26 +124,6 @@ namespace Infrastructure.Migrations
                             t.HasCheckConstraint("CK_AspNetUser_Email", "Email LIKE '%[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]%@[a-zA-Z0-9-]%'");
 
                             t.HasCheckConstraint("CK_AspNetUser_Gender", "Gender IN ('Male', 'Female')");
-                        });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "0d893228-14b9-446d-b727-442a0d353458",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "d428b60a-30cd-4b17-9cee-110bbfba87be",
-                            DateOfBirth = "18/03/1999",
-                            Email = "sragmahmoud4@gmail.com",
-                            EmailConfirmed = false,
-                            FirstName = "Mahmoud",
-                            Gender = "Male",
-                            LastName = "Serag",
-                            LockoutEnabled = false,
-                            PasswordHash = "Admin123",
-                            PhoneNumber = "+201064560413",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "8f74d826-020a-4334-8021-794dfe248fd2",
-                            TwoFactorEnabled = false
                         });
                 });
 
@@ -264,23 +247,6 @@ namespace Infrastructure.Migrations
                         {
                             t.HasCheckConstraint("CK_BookingStatus_Name", "Name IN ('Pending', 'Completed', 'Cancelled')");
                         });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Pending"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Completed"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Cancelled"
-                        });
                 });
 
             modelBuilder.Entity("Core.Models.Day", b =>
@@ -301,43 +267,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Days", t =>
                         {
                             t.HasCheckConstraint("CK_Day_Name", "Name IN ('Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')");
-                        });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Saturday"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Sunday"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Monday"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Tuesday"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Wednesday"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Thursday"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Friday"
                         });
                 });
 
