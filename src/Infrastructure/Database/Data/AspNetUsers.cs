@@ -5,9 +5,11 @@ namespace Infrastructure.Database.Data
 {
     internal static class AspNetUsersSeeding
     {
-        public static ApplicationUser SeedUsers()
+        public static List<ApplicationUser> SeedAspNetUsersEntity()
         {
-            return new ApplicationUser()
+            List<ApplicationUser> applicationUser = [];
+
+            applicationUser.Add(new ApplicationUser()
             {
                 Id = "0d893228-14b9-446d-b727-442a0d353458",
                 FirstName = "Mahmoud",
@@ -17,7 +19,9 @@ namespace Infrastructure.Database.Data
                 Email = "sragmahmoud4@gmail.com",
                 PasswordHash = "Admin123",
                 PhoneNumber = "+201064560413",
-            };
+            });
+
+            return applicationUser;
         }
     }
 }

@@ -4,6 +4,8 @@ using Core.Models;
 using Infrastructure.Database.Data;
 using Infrastructure.Database.EntitiesConfiguration;
 using Infrastructure.Database.Seeding;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,8 +28,9 @@ namespace Infrastructure.Database.Context
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected async override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            IApplicationBuilder applicationBuilder;
             modelBuilder.ApplyConfiguration<ExaminationPrice>(new ExaminationPriceConfiguration());
             modelBuilder.ApplyConfiguration<Booking>(new BookingConfiguration());
             modelBuilder.ApplyConfiguration<Appointment>(new AppointmentConfiguration());
@@ -48,10 +51,13 @@ namespace Infrastructure.Database.Context
                 new DatabaseSeeding<BookingStatus>(BookingStatusSeeding.SeedBookingStatusEntity())
             );
             modelBuilder.ApplyConfiguration<Day>(
-                new DatabaseSeeding<Day>(DaysSeeding.SeedWeekDays())
+                new DatabaseSeeding<Day>(DaysSeeding.SeedDaysEntity())
             );
             modelBuilder.ApplyConfiguration<ApplicationUser>(
-                new DatabaseSeeding<ApplicationUser>(AspNetUsersSeeding.SeedUsers())
+                new DatabaseSeeding<ApplicationUser>(AspNetUsersSeeding.SeedAspNetUsersEntity())
+            );
+            modelBuilder.ApplyConfiguration<IdentityRole>(
+                new DatabaseSeeding<IdentityRole>(AspNetRolesSeeding.SeedAspNetRolesEntity())
             );
 
             base.OnModelCreating(modelBuilder);

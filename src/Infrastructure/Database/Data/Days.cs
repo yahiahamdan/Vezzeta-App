@@ -5,7 +5,7 @@ namespace Infrastructure.Database.Data
 {
     internal static class DaysSeeding
     {
-        public static List<Day> SeedWeekDays()
+        public static List<Day> SeedDaysEntity()
         {
             List<Day> weekDays = [];
 
