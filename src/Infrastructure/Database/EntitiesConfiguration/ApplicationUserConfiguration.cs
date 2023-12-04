@@ -12,8 +12,7 @@ namespace Infrastructure.Database.EntitiesConfiguration
             builder.Property(property => property.FirstName).HasMaxLength(64);
             builder.Property(property => property.LastName).HasMaxLength(64);
             builder.Property(property => property.Email).HasMaxLength(64).IsRequired();
-            builder.Property(property => property.PhoneNumber).HasMaxLength(13).IsRequired();
-            builder.Property(property => property.PasswordHash).HasMaxLength(32).IsRequired();
+            builder.Property(property => property.PhoneNumber).HasMaxLength(20).IsRequired();
             builder.Property(property => property.DateOfBirth).HasMaxLength(15);
             builder.Property(property => property.Gender).HasConversion<string>();
 

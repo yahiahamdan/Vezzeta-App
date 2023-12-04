@@ -4,7 +4,6 @@ using Core.Models;
 using Infrastructure.Database.Data;
 using Infrastructure.Database.EntitiesConfiguration;
 using Infrastructure.Database.Seeding;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +29,6 @@ namespace Infrastructure.Database.Context
 
         protected async override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            IApplicationBuilder applicationBuilder;
             modelBuilder.ApplyConfiguration<ExaminationPrice>(new ExaminationPriceConfiguration());
             modelBuilder.ApplyConfiguration<Booking>(new BookingConfiguration());
             modelBuilder.ApplyConfiguration<Appointment>(new AppointmentConfiguration());
