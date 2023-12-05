@@ -33,5 +33,26 @@ namespace Infrastructure.Repositories
                 return result;
             }
         }
+
+        public async Task<(ApplicationUser user, IList<string> roles)> Login(
+            string email,
+            string password
+        )
+        {
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user != null)
+            {
+                var isCorrectPassword = await userManager.CheckPasswordAsync(user, password);
+                if (isCorrectPassword)
+                {
+                    var userRole = await userManager.GetRolesAsync(user);
+
+                    return (user, userRole);
+                }
+            }
+
+            return (null, null);
+        }
     }
 }

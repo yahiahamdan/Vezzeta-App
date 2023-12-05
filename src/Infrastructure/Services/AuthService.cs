@@ -4,6 +4,7 @@ using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using AutoMapper;
 using Core.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Services
@@ -13,13 +14,19 @@ namespace Infrastructure.Services
         private readonly IAuthRepository authRepository;
         private readonly IMapper mapper;
         private readonly IFileHelperService fileHelperService;
+        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IJwtHelpService jwtHelpService;
 
         public AuthService(
             IAuthRepository authRepository,
             IMapper mapper,
-            IFileHelperService fileHelperService
+            IFileHelperService fileHelperService,
+            IHttpContextAccessor httpContextAccessor,
+            IJwtHelpService jwtHelpService
         )
         {
+            this.jwtHelpService = jwtHelpService;
+            this.httpContextAccessor = httpContextAccessor;
             this.authRepository = authRepository;
             this.mapper = mapper;
             this.fileHelperService = fileHelperService;
@@ -56,6 +63,38 @@ namespace Infrastructure.Services
             }
 
             return result;
+        }
+
+        public async Task<ApplicationUser> Login(LoginDto loginDto)
+        {
+            var (result, roles) = await this.authRepository.Login(
+                loginDto.Email,
+                loginDto.Password
+            );
+
+            if (result != null)
+            {
+                var userRole = roles.FirstOrDefault();
+
+                var accessToken = jwtHelpService.GenerateToken(result.Email, result.Id, userRole);
+
+                httpContextAccessor.HttpContext.Response.Cookies.Append(
+                    "accessToken",
+                    accessToken,
+                    new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.Strict,
+                        Expires = DateTime.UtcNow.AddDays(30),
+                    }
+                );
+                return result;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

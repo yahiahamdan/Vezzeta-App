@@ -101,5 +101,62 @@ namespace Web.Controllers
                 );
             }
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDto loginDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(
+                        new
+                        {
+                            success = false,
+                            statusCode = 400,
+                            message = ModelState.ValidationState
+                        }
+                    );
+                }
+
+                var user = await this.authService.Login(loginDto);
+
+                if (user == null)
+                {
+                    return Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "Invalid credentials."
+                        }
+                    );
+                }
+                Console.WriteLine(user.LastName);
+                Console.WriteLine(user.Email);
+                Console.WriteLine(user.FirstName);
+                return Created(
+                    "User logged in successfully",
+                    new
+                    {
+                        success = true,
+                        statusCode = 201,
+                        message = "User logged in successfully"
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    new
+                    {
+                        success = false,
+                        statusCode = 500,
+                        message = ex.Message
+                    }
+                );
+            }
+        }
     }
 }
