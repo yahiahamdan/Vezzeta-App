@@ -14,15 +14,15 @@ namespace Application.Dtos
         public string LastName { get; set; }
 
         [Required, DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime DateOfBirth { get; set; }
+        public string DateOfBirth { get; set; }
 
-        [Required, DataType(DataType.PhoneNumber)]
+        [Required, RegularExpression(@"^01[0125]\d{8}$")]
         public string PhoneNumber { get; set; }
 
         [Required, EnumValidationAttribute(typeof(GendersEnum))]
-        public GendersEnum Genders { get; set; }
+        public string Gender { get; set; }
 
-        [Compare(nameof(Password))]
+        [Compare(nameof(Password)), DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
         public IFormFile? Image { get; set; }
