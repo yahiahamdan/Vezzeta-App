@@ -3,16 +3,15 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Database.Data
 {
-    internal static class AspNetRolesSeeding
+    public static class AspNetRolesSeeding
     {
-        public static List<IdentityRole> SeedAspNetRolesEntity()
+        public static async Task SeedAspNetRolesEntity(RoleManager<IdentityRole> roleManager)
         {
-            List<IdentityRole> roles = new List<IdentityRole>();
-
             foreach (RolesEnum role in Enum.GetValues(typeof(RolesEnum)))
-                roles.Add(new IdentityRole(role.ToString()));
-
-            return roles;
+            {
+                if (await roleManager.FindByNameAsync(role.ToString()) == null)
+                    await roleManager.CreateAsync(new IdentityRole { Name = role.ToString() });
+            }
         }
     }
 }

@@ -1,20 +1,22 @@
 ﻿using Core.Enums;
 using Core.Models;
+using Infrastructure.Database.Context;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.Database.Data
 {
     internal static class BookingStatusSeeding
     {
-        public static List<BookingStatus> SeedBookingStatusEntity()
+        public async static Task SeedBookingStatusEntity(IApplicationBuilder applicationBuilder)
         {
-            List<BookingStatus> bookingStatuses = [];
-
-            int idCounter = 0;
+            using var serviceScope = applicationBuilder.ApplicationServices.CreateScope();
+            var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
             foreach (BookingStatusEnum status in Enum.GetValues(typeof(BookingStatusEnum)))
-                bookingStatuses.Add(new BookingStatus() { Id = ++idCounter, Name = status });
+                await context.BookingStatus.AddAsync(new BookingStatus() { Name = status });
 
-            return bookingStatuses;
+            await context.SaveChangesAsync();
         }
     }
 }

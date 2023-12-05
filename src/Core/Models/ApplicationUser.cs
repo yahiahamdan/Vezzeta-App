@@ -1,5 +1,4 @@
-﻿using Core.Enums;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace Core.Models
@@ -11,7 +10,7 @@ namespace Core.Models
 
         [MinLength(3)]
         public string LastName { get; set; }
-        public GendersEnum Gender { get; set; }
+        public string Gender { get; set; }
         public string DateOfBirth { get; set; }
         public string? Image { get; set; }
         public ExaminationPrice ExaminationPrice { get; set; }

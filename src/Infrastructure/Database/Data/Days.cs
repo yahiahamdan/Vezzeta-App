@@ -1,20 +1,22 @@
 ﻿using Core.Enums;
 using Core.Models;
+using Infrastructure.Database.Context;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.Database.Data
 {
-    internal static class DaysSeeding
+    public static class DaysSeeding
     {
-        public static List<Day> SeedDaysEntity()
+        public static async Task SeedDaysEntity(IApplicationBuilder applicationBuilder)
         {
-            List<Day> weekDays = [];
-
-            int idCounter = 0;
+            using var serviceScope = applicationBuilder.ApplicationServices.CreateScope();
+            var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
             foreach (WeekDaysEnum day in Enum.GetValues(typeof(WeekDaysEnum)))
-                weekDays.Add(new Day() { Id = ++idCounter, Name = day });
+                await context.Days.AddAsync(new Day { Name = day });
 
-            return weekDays;
+            await context.SaveChangesAsync();
         }
     }
 }

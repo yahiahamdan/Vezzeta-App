@@ -1,27 +1,28 @@
-﻿using Core.Enums;
-using Core.Models;
+﻿using Core.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Database.Data
 {
-    internal static class AspNetUsersSeeding
+    public static class AspNetUsersSeeding
     {
-        public static List<ApplicationUser> SeedAspNetUsersEntity()
+        public static async Task SeedAspNetUsersEntity(UserManager<ApplicationUser> userManager)
         {
-            List<ApplicationUser> applicationUser = [];
-
-            applicationUser.Add(new ApplicationUser()
             {
-                Id = "0d893228-14b9-446d-b727-442a0d353458",
-                FirstName = "Mahmoud",
-                LastName = "Serag",
-                Gender = GendersEnum.Male,
-                DateOfBirth = "18/03/1999",
-                Email = "sragmahmoud4@gmail.com",
-                PasswordHash = "Admin123",
-                PhoneNumber = "+201064560413",
-            });
-
-            return applicationUser;
+                await userManager.CreateAsync(
+                    new ApplicationUser
+                    {
+                        FirstName = "Mahmoud",
+                        LastName = "Serag",
+                        Gender = "Male",
+                        UserName = "Admin123@admin.com",
+                        DateOfBirth = "18/03/1999",
+                        Email = "Admin123@admin.com",
+                        PasswordHash = "Admin123@",
+                        EmailConfirmed = true,
+                        PhoneNumber = "01064560413",
+                    }
+                );
+            }
         }
     }
 }
