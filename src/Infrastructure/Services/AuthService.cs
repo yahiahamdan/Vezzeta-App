@@ -74,9 +74,9 @@ namespace Infrastructure.Services
 
             if (result != null)
             {
-                var userRole = roles.FirstOrDefault();
+                var roleName = roles.FirstOrDefault();
 
-                var accessToken = jwtHelpService.GenerateToken(result.Email, result.Id, userRole);
+                var accessToken = jwtHelpService.GenerateToken(result.Email, result.Id, roleName);
 
                 httpContextAccessor.HttpContext.Response.Cookies.Append(
                     "accessToken",

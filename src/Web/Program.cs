@@ -70,6 +70,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFileHelperService, FileHelperService>();
 builder.Services.AddScoped<IJwtHelpService, JwtHelperService>();
 
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddEndpointsApiExplorer();

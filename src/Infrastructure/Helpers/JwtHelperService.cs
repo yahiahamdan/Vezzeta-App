@@ -38,13 +38,13 @@ namespace Infrastructure.Helpers
             return handler;
         }
 
-        public string GenerateToken(string email, string userId, string role)
+        public string GenerateToken(string email, string userId, string roleName)
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, email),
-                new Claim("userId", userId),
-                new Claim("role", role),
+                new Claim("UserId", userId),
+                new Claim("RoleName", roleName),
             };
 
             var signingCredentials = new SigningCredentials(

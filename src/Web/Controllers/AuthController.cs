@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -132,9 +132,7 @@ namespace Web.Controllers
                         }
                     );
                 }
-                Console.WriteLine(user.LastName);
-                Console.WriteLine(user.Email);
-                Console.WriteLine(user.FirstName);
+
                 return Created(
                     "User logged in successfully",
                     new
