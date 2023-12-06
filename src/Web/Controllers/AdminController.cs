@@ -5,26 +5,29 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
-    [Route("api/patients")]
+    [Route("api/admin")]
     [ApiController]
     public class AdminController : ControllerBase
     {
         private readonly IPatientService patientService;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IJwtHelpService jwtHelpService;
+        private readonly IDoctorService doctorService;
 
         public AdminController(
             IPatientService patientService,
             IHttpContextAccessor httpContextAccessor,
-            IJwtHelpService jwtHelpService
+            IJwtHelpService jwtHelpService,
+            IDoctorService doctorService
         )
         {
             this.httpContextAccessor = httpContextAccessor;
             this.patientService = patientService;
             this.jwtHelpService = jwtHelpService;
+            this.doctorService = doctorService;
         }
 
-        [HttpGet("count")]
+        [HttpGet("patients/count")]
         public async Task<IActionResult> GetCountOfPatients()
         {
             try
@@ -87,7 +90,7 @@ namespace Web.Controllers
             }
         }
 
-        [HttpGet("{patientId:int}")]
+        [HttpGet("patients/{patientId:int}")]
         public async Task<IActionResult> GetPatientById([FromRoute] string patientId)
         {
             try
@@ -160,7 +163,7 @@ namespace Web.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("patients")]
         public async Task<IActionResult> GetAllPatients(
             [FromQuery] int page,
             [FromQuery] int size,
@@ -233,6 +236,81 @@ namespace Web.Controllers
                         currentPage = page,
                         patientsPerPage = size,
                         patients
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    new
+                    {
+                        sucess = false,
+                        statusCode = 500,
+                        message = ex.Message
+                    }
+                );
+            }
+        }
+
+        [HttpGet("doctors/count")]
+        public async Task<IActionResult> GetDoctorsCount()
+        {
+            try
+            {
+                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
+                    "accessToken"
+                ];
+
+                if (accessToken == null)
+                    return Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "Unauthorized"
+                        }
+                    );
+
+                var decodedToken = this.jwtHelpService.DecodeToken(accessToken);
+
+                string roleName = decodedToken.Claims
+                    .First(claim => claim.Type == "RoleName")
+                    .Value;
+
+                if (roleName != "Admin")
+                {
+                    return StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "Forbidden"
+                        }
+                    );
+                }
+
+                var totalDoctorsCount = await this.doctorService.GetCountOfDoctors(
+                    RolesEnum.Doctor.ToString()
+                );
+
+                if (totalDoctorsCount == 0)
+                    return Ok(
+                        new
+                        {
+                            success = true,
+                            statusCdoe = 200,
+                            message = "No doctors found in this page."
+                        }
+                    );
+
+                return Ok(
+                    new
+                    {
+                        succuss = true,
+                        statusCode = 200,
+                        totalDoctorsCount = totalDoctorsCount,
                     }
                 );
             }

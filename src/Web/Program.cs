@@ -69,9 +69,10 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFileHelperService, FileHelperService>();
 builder.Services.AddScoped<IJwtHelpService, JwtHelperService>();
-
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+builder.Services.AddScoped<IDoctorService, DoctorService>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 

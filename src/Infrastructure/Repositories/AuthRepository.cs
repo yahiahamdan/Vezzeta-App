@@ -21,14 +21,14 @@ namespace Infrastructure.Repositories
 
             try
             {
-                await userManager.AddToRoleAsync(user, RolesEnum.Patient.ToString());
+                await this.userManager.AddToRoleAsync(user, RolesEnum.Patient.ToString());
 
                 return result;
             }
             catch (Exception ex)
             {
                 if (result.Succeeded)
-                    await userManager.DeleteAsync(user);
+                    await this.userManager.DeleteAsync(user);
 
                 return result;
             }
@@ -39,14 +39,14 @@ namespace Infrastructure.Repositories
             string password
         )
         {
-            var user = await userManager.FindByEmailAsync(email);
+            var user = await this.userManager.FindByEmailAsync(email);
 
             if (user != null)
             {
-                var isCorrectPassword = await userManager.CheckPasswordAsync(user, password);
+                var isCorrectPassword = await this.userManager.CheckPasswordAsync(user, password);
                 if (isCorrectPassword)
                 {
-                    var userRole = await userManager.GetRolesAsync(user);
+                    var userRole = await this.userManager.GetRolesAsync(user);
 
                     return (user, userRole);
                 }

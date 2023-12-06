@@ -21,11 +21,11 @@ namespace Infrastructure.Repositories
 
         public async Task<int> GetCountOfPatients(string roleName)
         {
-            var role = await roleManager.FindByNameAsync(roleName);
+            var role = await this.roleManager.FindByNameAsync(roleName);
 
             if (role != null)
             {
-                var patientsTotalCount = await userManager.GetUsersInRoleAsync(roleName);
+                var patientsTotalCount = await this.userManager.GetUsersInRoleAsync(roleName);
 
                 if (patientsTotalCount != null)
                     return patientsTotalCount.Count;
@@ -38,7 +38,7 @@ namespace Infrastructure.Repositories
 
         public async Task<object> GetPatientById(string patientId)
         {
-            var patient = await userManager.FindByIdAsync(patientId);
+            var patient = await this.userManager.FindByIdAsync(patientId);
 
             if (patient == null)
                 return null;
@@ -60,7 +60,7 @@ namespace Infrastructure.Repositories
             string roleName
         )
         {
-            IList<ApplicationUser> patients = await userManager.GetUsersInRoleAsync(roleName);
+            IList<ApplicationUser> patients = await this.userManager.GetUsersInRoleAsync(roleName);
 
             var result = patients
                 .Where(
