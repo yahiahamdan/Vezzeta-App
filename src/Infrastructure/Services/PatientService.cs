@@ -1,7 +1,6 @@
 ﻿using Application.Interfaces.Helpers;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
-using System.Security.Claims;
 
 namespace Infrastructure.Services
 {
@@ -16,14 +15,8 @@ namespace Infrastructure.Services
             this.patientRepository = patientRepository;
         }
 
-        public async Task<int> GetCountOfPatients(string token)
+        public async Task<int> GetCountOfPatients(string roleName)
         {
-            var decodedToken = this.jwtHelpService.DecodeToken(token);
-
-            string roleName = decodedToken.Claims
-                .First(claim => claim.Type == ClaimTypes.Role)
-                .Value;
-
             return await this.patientRepository.GetCountOfPatients(roleName);
         }
     }

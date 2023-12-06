@@ -25,7 +25,6 @@ namespace Infrastructure.Repositories
             if (role != null)
             {
                 var patientsTotalCount = await userManager.GetUsersInRoleAsync(roleName);
-                Console.WriteLine(patientsTotalCount);
 
                 if (patientsTotalCount != null)
                     return patientsTotalCount.Count;

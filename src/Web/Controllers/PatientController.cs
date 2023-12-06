@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Services;
+﻿using Application.Interfaces.Helpers;
+using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -9,18 +10,20 @@ namespace Web.Controllers
     {
         private readonly IPatientService patientService;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IJwtHelpService jwtHelpService;
 
         public PatientController(
             IPatientService patientService,
-            IHttpContextAccessor httpContextAccessor
+            IHttpContextAccessor httpContextAccessor,
+            IJwtHelpService jwtHelpService
         )
         {
             this.httpContextAccessor = httpContextAccessor;
             this.patientService = patientService;
+            this.jwtHelpService = jwtHelpService;
         }
 
         [HttpGet("count")]
-        /*[Authorize]*/
         public async Task<IActionResult> GetCountOfPatients()
         {
             try
@@ -39,7 +42,26 @@ namespace Web.Controllers
                         }
                     );
 
-                int numberOfPatients = await this.patientService.GetCountOfPatients(accessToken);
+                var decodedToken = this.jwtHelpService.DecodeToken(accessToken);
+
+                string roleName = decodedToken.Claims
+                    .First(claim => claim.Type == "RoleName")
+                    .Value;
+
+                if (roleName != "Admin")
+                {
+                    return StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "Forbidden"
+                        }
+                    );
+                }
+
+                int numberOfPatients = await this.patientService.GetCountOfPatients("Patient");
 
                 return Ok(
                     new
@@ -58,7 +80,7 @@ namespace Web.Controllers
                     {
                         success = false,
                         statusCode = 500,
-                        message = ex.Message
+                        message = ex
                     }
                 );
             }
