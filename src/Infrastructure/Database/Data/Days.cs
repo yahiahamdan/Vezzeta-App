@@ -13,10 +13,13 @@ namespace Infrastructure.Database.Data
             using var serviceScope = applicationBuilder.ApplicationServices.CreateScope();
             var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-            foreach (WeekDaysEnum day in Enum.GetValues(typeof(WeekDaysEnum)))
-                await context.Days.AddAsync(new Day { Name = day });
+            if (!context.Days.Any())
+            {
+                foreach (WeekDaysEnum day in Enum.GetValues(typeof(WeekDaysEnum)))
+                    await context.Days.AddAsync(new Day { Name = day });
 
-            await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

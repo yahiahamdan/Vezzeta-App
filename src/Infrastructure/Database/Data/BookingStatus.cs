@@ -13,10 +13,13 @@ namespace Infrastructure.Database.Data
             using var serviceScope = applicationBuilder.ApplicationServices.CreateScope();
             var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-            foreach (BookingStatusEnum status in Enum.GetValues(typeof(BookingStatusEnum)))
-                await context.BookingStatus.AddAsync(new BookingStatus() { Name = status });
+            if (!context.BookingStatus.Any())
+            {
+                foreach (BookingStatusEnum status in Enum.GetValues(typeof(BookingStatusEnum)))
+                    await context.BookingStatus.AddAsync(new BookingStatus() { Name = status });
 
-            await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
+            }
         }
     }
 }
