@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Dtos;
+using Application.Interfaces.Repositories;
 using Core.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -33,6 +34,58 @@ namespace Infrastructure.Repositories
             }
 
             return 0;
+        }
+
+        public async Task<object> GetPatientById(string patientId)
+        {
+            var patient = await userManager.FindByIdAsync(patientId);
+
+            if (patient == null)
+                return null;
+
+            return new
+            {
+                Image = patient.Image,
+                fullName = $"{patient.FirstName} {patient.LastName}",
+                email = patient.Email,
+                gender = patient.Gender,
+                dateOfBirth = patient.DateOfBirth,
+            };
+        }
+
+        public async Task<List<PatientDto>> GetAllPatient(
+            int page,
+            int size,
+            string searchQuery,
+            string roleName
+        )
+        {
+            IList<ApplicationUser> patients = await userManager.GetUsersInRoleAsync(roleName);
+
+            var result = patients
+                .Where(
+                    patient =>
+                        patient.Email.Contains(searchQuery)
+                        || patient.PhoneNumber.Contains(searchQuery)
+                )
+                .Skip((page - 1) * size)
+                .Take(size)
+                .Select(
+                    patient =>
+                        new PatientDto
+                        {
+                            patientId = patient.Id,
+                            email = patient.Email,
+                            fullName = $"{patient.FirstName} {patient.LastName}",
+                            image = patient.Image,
+                            phoneNumber = patient.PhoneNumber,
+                            gender = patient.Gender,
+                            dateOfBirth = patient.DateOfBirth
+                        }
+                )
+                .ToList();
+
+            return result;
         }
     }
 }
