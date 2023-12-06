@@ -3,5 +3,6 @@
     public interface IDoctorService
     {
         public Task<int> GetCountOfDoctors(string roleName);
+        public Task<object> GetDoctorById(string doctorId);
     }
 }

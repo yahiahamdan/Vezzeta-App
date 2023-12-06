@@ -90,7 +90,7 @@ namespace Web.Controllers
             }
         }
 
-        [HttpGet("patients/{patientId:int}")]
+        [HttpGet("patients/{patientId}")]
         public async Task<IActionResult> GetPatientById([FromRoute] string patientId)
         {
             try
@@ -311,6 +311,79 @@ namespace Web.Controllers
                         succuss = true,
                         statusCode = 200,
                         totalDoctorsCount = totalDoctorsCount,
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    new
+                    {
+                        sucess = false,
+                        statusCode = 500,
+                        message = ex.Message
+                    }
+                );
+            }
+        }
+
+        [HttpGet("doctors/{doctorId}")]
+        public async Task<IActionResult> GetDoctorById(string doctorId)
+        {
+            try
+            {
+                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
+                    "accessToken"
+                ];
+
+                if (accessToken == null)
+                    return Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "Unauthorized"
+                        }
+                    );
+
+                var decodedToken = this.jwtHelpService.DecodeToken(accessToken);
+
+                string roleName = decodedToken.Claims
+                    .First(claim => claim.Type == "RoleName")
+                    .Value;
+
+                if (roleName != "Admin")
+                {
+                    return StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "Forbidden"
+                        }
+                    );
+                }
+
+                var doctor = await this.doctorService.GetDoctorById(doctorId);
+
+                if (doctor == null)
+                    return Ok(
+                        new
+                        {
+                            success = true,
+                            statusCdoe = 200,
+                            message = "No doctors found with the given Id."
+                        }
+                    );
+
+                return Ok(
+                    new
+                    {
+                        succuss = true,
+                        statusCode = 200,
+                        doctor,
                     }
                 );
             }

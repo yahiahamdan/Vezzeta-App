@@ -19,5 +19,22 @@ namespace Infrastructure.Repositories
 
             return doctors.Count;
         }
+
+        public async Task<object> GetDoctorById(string doctorId)
+        {
+            ApplicationUser doctor = await this.userManager.FindByIdAsync(doctorId);
+
+            return new
+            {
+                email = doctor.Email,
+                firstName = doctor.FirstName,
+                lastName = doctor.LastName,
+                image = doctor.Image,
+                phoneNumber = doctor.PhoneNumber,
+                gender = doctor.Gender,
+                dateOfBirth = doctor.DateOfBirth,
+                Specialization = doctor.Specialization,
+            };
+        }
     }
 }

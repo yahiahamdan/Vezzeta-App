@@ -21,5 +21,15 @@ namespace Infrastructure.Services
 
             return totalDoctorsCount;
         }
+
+        public async Task<object> GetDoctorById(string doctorId)
+        {
+            var totalDoctorsCount = await this.doctorRepository.GetDoctorById(doctorId);
+
+            if (totalDoctorsCount == null)
+                return null;
+
+            return totalDoctorsCount;
+        }
     }
 }
