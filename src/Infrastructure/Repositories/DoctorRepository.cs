@@ -32,6 +32,14 @@ namespace Infrastructure.Repositories
         {
             ApplicationUser doctor = await this.userManager.FindByIdAsync(doctorId);
 
+            string specialization = String.Empty;
+
+            if (doctor != null)
+                specialization = this.context.Specializations
+                    .Where(spec => spec.Id == doctor.SpecializationId)
+                    .Select(spec => spec.Title)
+                    .SingleOrDefault();
+
             return new
             {
                 email = doctor.Email,
@@ -41,7 +49,7 @@ namespace Infrastructure.Repositories
                 phoneNumber = doctor.PhoneNumber,
                 gender = doctor.Gender,
                 dateOfBirth = doctor.DateOfBirth,
-                Specialization = doctor.Specialization,
+                Specialization = specialization,
             };
         }
 
