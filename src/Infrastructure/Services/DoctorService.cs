@@ -123,5 +123,20 @@ namespace Infrastructure.Services
 
             return result.Item1;
         }
+
+        public async Task<List<ReturnDoctorDto>> GetAllDoctors(
+            int page,
+            int limit,
+            string searchQuery
+        )
+        {
+            List<ReturnDoctorDto> doctors = await this.doctorRepository.GetAllDoctors(
+                page,
+                limit,
+                searchQuery
+            );
+
+            return doctors;
+        }
     }
 }

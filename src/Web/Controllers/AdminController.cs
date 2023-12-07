@@ -515,7 +515,6 @@ namespace Web.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
                 return StatusCode(
                     500,
                     new
@@ -528,7 +527,7 @@ namespace Web.Controllers
             }
         }
 
-        [HttpPut("{doctorId}")]
+        [HttpPut("doctors/{doctorId}")]
         public async Task<IActionResult> UpdateDoctorById(
             [FromRoute] string doctorId,
             UpdateDoctorDto updateDoctorDto
@@ -639,6 +638,93 @@ namespace Web.Controllers
                         succuss = true,
                         statusCode = 200,
                         messgae = "Doctor updated successfully",
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    new
+                    {
+                        sucess = false,
+                        statusCode = 500,
+                        message = ex.Message
+                    }
+                );
+            }
+        }
+
+        [HttpGet("doctors")]
+        public async Task<IActionResult> GetAllDoctors(
+            [FromQuery] int page,
+            [FromQuery] int limit,
+            [FromQuery] string searchQuery
+        )
+        {
+            try
+            {
+                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
+                    "accessToken"
+                ];
+
+                if (accessToken == null)
+                    return Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "Unauthorized"
+                        }
+                    );
+
+                var decodedToken = this.jwtHelpService.DecodeToken(accessToken);
+
+                string roleName = decodedToken.Claims
+                    .First(claim => claim.Type == "RoleName")
+                    .Value;
+
+                if (roleName != "Admin")
+                {
+                    return StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "Forbidden"
+                        }
+                    );
+                }
+
+                var doctors = await this.doctorService.GetAllDoctors(page, limit, searchQuery);
+                var totalDoctorsCount = await this.doctorService.GetCountOfDoctors(
+                    RolesEnum.Doctor.ToString()
+                );
+                Console.WriteLine(totalDoctorsCount);
+
+                Console.WriteLine(5000000000);
+
+                if (doctors.Count == 0 || totalDoctorsCount == 0)
+                    return Ok(
+                        new
+                        {
+                            sucess = true,
+                            statusCode = 200,
+                            message = "No doctors found",
+                        }
+                    );
+
+                return Ok(
+                    new
+                    {
+                        succuss = true,
+                        statusCode = 200,
+                        totalDoctorsCount = totalDoctorsCount,
+                        maxPages = (int)Math.Ceiling((decimal)totalDoctorsCount / limit),
+                        currentPage = page,
+                        doctorsPerPage = limit,
+                        doctors,
                     }
                 );
             }

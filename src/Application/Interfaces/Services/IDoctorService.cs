@@ -17,5 +17,6 @@ namespace Application.Interfaces.Services
             string doctorId,
             string specialization
         );
+        public Task<List<ReturnDoctorDto>> GetAllDoctors(int page, int limit, string searchQuery);
     }
 }

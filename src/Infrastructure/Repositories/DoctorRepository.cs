@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Dtos;
+using Application.Interfaces.Repositories;
 using Core.Enums;
 using Core.Models;
 using Infrastructure.Database.Context;
@@ -128,6 +129,50 @@ namespace Infrastructure.Repositories
             }
 
             return (result, oldImage);
+        }
+
+        public async Task<List<ReturnDoctorDto>> GetAllDoctors(
+            int page,
+            int limit,
+            string searchQuery
+        )
+        {
+            IList<ApplicationUser> doctors = await this.userManager.GetUsersInRoleAsync(
+                RolesEnum.Doctor.ToString()
+            );
+
+            var result = doctors
+                .Join(
+                    this.context.Specializations,
+                    doctor => doctor.SpecializationId,
+                    specialization => specialization.Id,
+                    (doctor, specialization) =>
+                        new { Doctor = doctor, Specialization = specialization }
+                )
+                .Where(
+                    joined =>
+                        joined.Doctor.Email.Contains(searchQuery)
+                        || joined.Doctor.PhoneNumber.Contains(searchQuery)
+                )
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .Select(
+                    joined =>
+                        new ReturnDoctorDto
+                        {
+                            doctorId = joined.Doctor.Id,
+                            email = joined.Doctor.Email,
+                            fullName = $"{joined.Doctor.FirstName} {joined.Doctor.LastName}",
+                            image = joined.Doctor.Image,
+                            phoneNumber = joined.Doctor.PhoneNumber,
+                            gender = joined.Doctor.Gender,
+                            dateOfBirth = joined.Doctor.DateOfBirth,
+                            specialization = joined.Specialization.Title
+                        }
+                )
+                .ToList();
+
+            return result;
         }
     }
 }

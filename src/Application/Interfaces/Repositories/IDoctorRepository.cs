@@ -1,4 +1,5 @@
-﻿using Core.Models;
+﻿using Application.Dtos;
+using Core.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Application.Interfaces.Repositories
@@ -19,5 +20,6 @@ namespace Application.Interfaces.Repositories
             string doctorId,
             string imageName
         );
+        public Task<List<ReturnDoctorDto>> GetAllDoctors(int page, int limit, string searchQuery);
     }
 }
