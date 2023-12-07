@@ -85,5 +85,10 @@ namespace Infrastructure.Repositories
         {
             return await this.userManager.DeleteAsync(user);
         }
+
+        /*public async Task<IdentityResult> UpdateDoctorById(string doctorId)
+        {
+            ApplicationUser doctor = await this.userManager.FindByIdAsync(doctorId);
+        }*/
     }
 }

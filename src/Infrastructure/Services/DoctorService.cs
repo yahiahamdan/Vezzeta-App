@@ -13,16 +13,19 @@ namespace Infrastructure.Services
         private readonly IDoctorRepository doctorRepository;
         private readonly IMapper mapper;
         private readonly IFileHelperService fileHelperService;
+        private readonly IEmailHelperService emailHelperService;
 
         public DoctorService(
             IDoctorRepository doctorRepository,
             IMapper mapper,
-            IFileHelperService fileHelperService
+            IFileHelperService fileHelperService,
+            IEmailHelperService emailHelperService
         )
         {
             this.mapper = mapper;
             this.doctorRepository = doctorRepository;
             this.fileHelperService = fileHelperService;
+            this.emailHelperService = emailHelperService;
         }
 
         public async Task<int> GetCountOfDoctors(string roleName)
@@ -72,6 +75,14 @@ namespace Infrastructure.Services
 
                 await this.doctorRepository.DeleteSingleDoctor(user);
             }
+
+            string credentials =
+                $"Your Credentials:\nEmail: {doctorDto.Email}\nPassword: {doctorDto.Password}";
+            this.emailHelperService.SendEmail(
+                doctorDto.Email,
+                "Doctor registered successfully.",
+                credentials
+            );
 
             return result;
         }
