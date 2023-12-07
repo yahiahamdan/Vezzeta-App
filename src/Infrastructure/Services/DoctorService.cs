@@ -86,5 +86,42 @@ namespace Infrastructure.Services
 
             return result;
         }
+
+        public async Task<IdentityResult> UpdateDoctorById(
+            UpdateDoctorDto doctorDto,
+            string doctorId,
+            string specialization
+        )
+        {
+            ApplicationUser user = this.mapper.Map<ApplicationUser>(doctorDto);
+
+            string[] fileInfo = await this.fileHelperService.UploadFile(doctorDto.Image);
+
+            var result = await this.doctorRepository.UpdateDoctorById(
+                user,
+                specialization,
+                doctorId,
+                fileInfo[0]
+            );
+
+            if (!result.Item1.Succeeded)
+            {
+                if (File.Exists(Path.Combine(fileInfo[1], fileInfo[0])))
+                {
+                    string imagePath = Path.Combine(fileInfo[1], fileInfo[0]);
+                    fileHelperService.DeleteFile(imagePath);
+                }
+            }
+            else
+            {
+                if (File.Exists(Path.Combine(fileInfo[1], result.Item2)))
+                {
+                    string imagePath = Path.Combine(fileInfo[1], result.Item2);
+                    fileHelperService.DeleteFile(imagePath);
+                }
+            }
+
+            return result.Item1;
+        }
     }
 }

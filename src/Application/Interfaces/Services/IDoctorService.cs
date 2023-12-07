@@ -12,5 +12,10 @@ namespace Application.Interfaces.Services
             string password,
             string specialization
         );
+        public Task<IdentityResult> UpdateDoctorById(
+            UpdateDoctorDto doctorDto,
+            string doctorId,
+            string specialization
+        );
     }
 }

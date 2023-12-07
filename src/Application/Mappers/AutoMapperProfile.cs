@@ -21,6 +21,17 @@ namespace Application.Mappers
                     dest => dest.Specialization,
                     opt => opt.MapFrom(src => src.Specialization.Title)
                 );
+
+            CreateMap<UpdateDoctorDto, ApplicationUser>()
+                .ForMember(
+                    dest => dest.Specialization,
+                    opt => opt.MapFrom(src => new Specialization { Title = src.Specialization })
+                );
+            CreateMap<ApplicationUser, UpdateDoctorDto>()
+                .ForMember(
+                    dest => dest.Specialization,
+                    opt => opt.MapFrom(src => src.Specialization.Title)
+                );
         }
     }
 }

@@ -13,5 +13,11 @@ namespace Application.Interfaces.Repositories
             string specialization
         );
         public Task<IdentityResult> DeleteSingleDoctor(ApplicationUser user);
+        public Task<(IdentityResult, string)> UpdateDoctorById(
+            ApplicationUser doctor,
+            string specialization,
+            string doctorId,
+            string imageName
+        );
     }
 }

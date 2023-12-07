@@ -527,5 +527,134 @@ namespace Web.Controllers
                 );
             }
         }
+
+        [HttpPut("{doctorId}")]
+        public async Task<IActionResult> UpdateDoctorById(
+            [FromRoute] string doctorId,
+            UpdateDoctorDto updateDoctorDto
+        )
+        {
+            try
+            {
+                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
+                    "accessToken"
+                ];
+
+                if (accessToken == null)
+                    return Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "Unauthorized"
+                        }
+                    );
+
+                var decodedToken = this.jwtHelpService.DecodeToken(accessToken);
+
+                string roleName = decodedToken.Claims
+                    .First(claim => claim.Type == "RoleName")
+                    .Value;
+
+                if (roleName != "Admin")
+                {
+                    return StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "Forbidden"
+                        }
+                    );
+                }
+
+                if (!ModelState.IsValid)
+                    return BadRequest(
+                        new
+                        {
+                            success = false,
+                            statusCode = 400,
+                            message = ModelState.ValidationState
+                        }
+                    );
+
+                if (updateDoctorDto.Image == null)
+                    return BadRequest(
+                        new
+                        {
+                            success = false,
+                            statusCode = 400,
+                            messgae = "Image is required."
+                        }
+                    );
+
+                if (updateDoctorDto.Image.Length > 5 * 1024 * 1024)
+                {
+                    return BadRequest(
+                        new
+                        {
+                            success = false,
+                            statusCode = 400,
+                            messgae = "Invalid image size"
+                        }
+                    );
+                }
+
+                if (
+                    updateDoctorDto.Image.ContentType != "image/png"
+                    && updateDoctorDto.Image.ContentType != "image/jpg"
+                    && updateDoctorDto.Image.ContentType != "image/jpeg"
+                )
+                    return BadRequest(
+                        new
+                        {
+                            success = false,
+                            statusCode = 400,
+                            messgae = "Invalid image type"
+                        }
+                    );
+
+                var doctor = await this.doctorService.UpdateDoctorById(
+                    updateDoctorDto,
+                    doctorId,
+                    updateDoctorDto.Specialization
+                );
+
+                if (!doctor.Succeeded)
+
+                    return StatusCode(
+                        500,
+                        new
+                        {
+                            sucess = false,
+                            statusCode = 500,
+                            message = doctor.Errors
+                        }
+                    );
+
+                return Ok(
+                    new
+                    {
+                        succuss = true,
+                        statusCode = 200,
+                        messgae = "Doctor updated successfully",
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(
+                    500,
+                    new
+                    {
+                        sucess = false,
+                        statusCode = 500,
+                        message = ex.Message
+                    }
+                );
+            }
+        }
     }
 }

@@ -94,9 +94,40 @@ namespace Infrastructure.Repositories
             return await this.userManager.DeleteAsync(user);
         }
 
-        /*public async Task<IdentityResult> UpdateDoctorById(string doctorId)
+        public async Task<(IdentityResult, string)> UpdateDoctorById(
+            ApplicationUser doctor,
+            string specialization,
+            string doctorId,
+            string imageName
+        )
         {
-            ApplicationUser doctor = await this.userManager.FindByIdAsync(doctorId);
-        }*/
+            int specializationId = await this.context.Specializations
+                .Where(spec => spec.Title == specialization)
+                .Select(spec => spec.Id)
+                .FirstOrDefaultAsync();
+
+            ApplicationUser user = await this.userManager.FindByIdAsync(doctorId);
+
+            string oldImage = user.Image;
+
+            user.Email = doctor.Email;
+            user.UserName = doctor.Email;
+            user.FirstName = doctor.FirstName;
+            user.LastName = doctor.LastName;
+            user.PhoneNumber = doctor.PhoneNumber;
+            user.Gender = doctor.Gender;
+            user.DateOfBirth = doctor.DateOfBirth;
+            user.Image = imageName;
+
+            var result = await this.userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                user.SpecializationId = specializationId;
+                this.context.SaveChanges();
+            }
+
+            return (result, oldImage);
+        }
     }
 }
