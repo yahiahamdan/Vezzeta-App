@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231204190336_FixDatabaseSeeding")]
-    partial class FixDatabaseSeeding
+    [Migration("20231208110904_AddPropertyDateToAppointmentsEntity")]
+    partial class AddPropertyDateToAppointmentsEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,26 +123,6 @@ namespace Infrastructure.Migrations
 
                             t.HasCheckConstraint("CK_AspNetUser_Gender", "Gender IN ('Male', 'Female')");
                         });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "0d893228-14b9-446d-b727-442a0d353458",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "ee2cfe5f-7b70-4da1-8e59-92020985a398",
-                            DateOfBirth = "18/03/1999",
-                            Email = "sragmahmoud4@gmail.com",
-                            EmailConfirmed = false,
-                            FirstName = "Mahmoud",
-                            Gender = "Male",
-                            LastName = "Serag",
-                            LockoutEnabled = false,
-                            PasswordHash = "Admin123",
-                            PhoneNumber = "+201064560413",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "95295ecb-3985-45a8-aa8e-be2447127179",
-                            TwoFactorEnabled = false
-                        });
                 });
 
             modelBuilder.Entity("Core.Models.Appointment", b =>
@@ -152,6 +132,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("DayId")
                         .HasColumnType("int");
@@ -265,23 +248,6 @@ namespace Infrastructure.Migrations
                         {
                             t.HasCheckConstraint("CK_BookingStatus_Name", "Name IN ('Pending', 'Completed', 'Cancelled')");
                         });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Pending"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Completed"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Cancelled"
-                        });
                 });
 
             modelBuilder.Entity("Core.Models.Day", b =>
@@ -302,43 +268,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Days", t =>
                         {
                             t.HasCheckConstraint("CK_Day_Name", "Name IN ('Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')");
-                        });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Saturday"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Sunday"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Monday"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Tuesday"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Wednesday"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Thursday"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Friday"
                         });
                 });
 
@@ -484,23 +413,6 @@ namespace Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "0bb28724-4f4a-4cbd-9f5c-38e0860223d2",
-                            Name = "Patient"
-                        },
-                        new
-                        {
-                            Id = "97911e8b-14cf-48df-a8db-42f1195613a9",
-                            Name = "Doctor"
-                        },
-                        new
-                        {
-                            Id = "f21683e9-b2bd-4c48-b8a0-a85a11bde582",
-                            Name = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
