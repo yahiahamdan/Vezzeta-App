@@ -186,5 +186,29 @@ namespace Infrastructure.Repositories
                 return ex.Message;
             }
         }
+
+        public Booking GetBookingById(int bookingId)
+        {
+            var booking = this.context.Bookings
+                .Where(booking => booking.Id == bookingId)
+                .FirstOrDefault();
+
+            return booking;
+        }
+
+        public BookingStatus GetBookingStatusById(int bookingStatusId)
+        {
+            var bookingStatus = this.context.BookingStatus
+                .Where(booking => booking.Id == bookingStatusId)
+                .FirstOrDefault();
+
+            return bookingStatus;
+        }
+
+        public void ConfirmBooking(Booking booking, int statusId)
+        {
+            booking.StatusId = statusId;
+            this.context.SaveChanges();
+        }
     }
 }

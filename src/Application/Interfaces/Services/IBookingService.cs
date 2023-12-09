@@ -9,5 +9,6 @@ namespace Application.Interfaces.Services
             int appointmentTimeId,
             DiscountCodeCouponDto discountCodeCouponDto
         );
+        public string ConfirmBooking(string doctorId, int bookingId);
     }
 }

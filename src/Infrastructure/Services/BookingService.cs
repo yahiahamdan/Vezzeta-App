@@ -33,5 +33,41 @@ namespace Infrastructure.Services
                 return ex.Message;
             }
         }
+
+        public string ConfirmBooking(string doctorId, int bookingId)
+        {
+            try
+            {
+                var booking = this.bookingRepository.GetBookingById(bookingId);
+
+                if (booking == null)
+                    return "Booking not found with the given Id";
+
+                var appointment = this.bookingRepository.GetAppointmentById(
+                    booking.AppointmentTimeId
+                );
+
+                if (appointment == null || appointment.DoctorId != doctorId)
+                    return "Forbidden. You can't access this content";
+
+                var bookingStatus = this.bookingRepository.GetBookingStatusById(booking.StatusId);
+
+                if (
+                    bookingStatus.Name.ToString() == "Completed"
+                    || bookingStatus.Name.ToString() == "Cancelled"
+                )
+                    return "Forbidden. The booking status has been officially confirmed or cancelled";
+
+                var completedStatusId = this.bookingRepository.GetBookingStatusId("Completed");
+
+                this.bookingRepository.ConfirmBooking(booking, completedStatusId);
+
+                return "Succeeded";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }
