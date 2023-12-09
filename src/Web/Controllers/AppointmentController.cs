@@ -25,15 +25,11 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNewAppointment(
-            [FromBody] AppointmentDto appointmentDto
-        )
+        public IActionResult CreateNewAppointment([FromBody] AppointmentDto appointmentDto)
         {
             try
             {
-                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
-                    "accessToken"
-                ];
+                var accessToken = httpContextAccessor.HttpContext.Request.Cookies["accessToken"];
 
                 if (accessToken == null)
                     return Unauthorized(
@@ -60,7 +56,7 @@ namespace Web.Controllers
                         {
                             success = false,
                             statusCode = 403,
-                            message = "Forbidden"
+                            message = "Forbidden. Should log in with doctor account."
                         }
                     );
                 }
@@ -129,16 +125,14 @@ namespace Web.Controllers
         }
 
         [HttpPatch("{appointmentTimeId:int}")]
-        public async Task<IActionResult> UpdateAppointmentTimeById(
+        public IActionResult UpdateAppointmentTimeById(
             [FromBody] UpdateAppointmentTimeDto updateAppointmentTimeDto,
             [FromRoute] int appointmentTimeId
         )
         {
             try
             {
-                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
-                    "accessToken"
-                ];
+                var accessToken = httpContextAccessor.HttpContext.Request.Cookies["accessToken"];
 
                 if (accessToken == null)
                     return Unauthorized(
@@ -165,7 +159,7 @@ namespace Web.Controllers
                         {
                             success = false,
                             statusCode = 403,
-                            message = "Forbidden"
+                            message = "Forbidden. Should log in with doctor account."
                         }
                     );
                 }
@@ -223,15 +217,11 @@ namespace Web.Controllers
         }
 
         [HttpDelete("{appointmentTimeId:int}")]
-        public async Task<IActionResult> DeleteAppointmentTimeById(
-            [FromRoute] int appointmentTimeId
-        )
+        public IActionResult DeleteAppointmentTimeById([FromRoute] int appointmentTimeId)
         {
             try
             {
-                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
-                    "accessToken"
-                ];
+                var accessToken = httpContextAccessor.HttpContext.Request.Cookies["accessToken"];
 
                 if (accessToken == null)
                     return Unauthorized(
@@ -258,7 +248,7 @@ namespace Web.Controllers
                         {
                             success = false,
                             statusCode = 403,
-                            message = "Forbidden"
+                            message = "Forbidden. Should log in with doctor account."
                         }
                     );
                 }

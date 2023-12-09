@@ -29,9 +29,7 @@ namespace Web.Controllers
         {
             try
             {
-                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
-                    "accessToken"
-                ];
+                var accessToken = httpContextAccessor.HttpContext.Request.Cookies["accessToken"];
 
                 if (accessToken == null)
                     return Unauthorized(
@@ -57,7 +55,7 @@ namespace Web.Controllers
                         {
                             success = false,
                             statusCode = 403,
-                            message = "Forbidden"
+                            message = "Forbidden. Should log in with admin account."
                         }
                     );
                 }
@@ -113,9 +111,7 @@ namespace Web.Controllers
         {
             try
             {
-                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
-                    "accessToken"
-                ];
+                var accessToken = httpContextAccessor.HttpContext.Request.Cookies["accessToken"];
 
                 if (accessToken == null)
                     return Unauthorized(
@@ -141,7 +137,7 @@ namespace Web.Controllers
                         {
                             success = false,
                             statusCode = 403,
-                            message = "Forbidden"
+                            message = "Forbidden. Should log in with admin account."
                         }
                     );
                 }
@@ -180,12 +176,12 @@ namespace Web.Controllers
             catch (Exception ex)
             {
                 return StatusCode(
-                    403,
+                    500,
                     new
                     {
                         success = false,
-                        statusCode = 403,
-                        message = "Forbidden"
+                        statusCode = 500,
+                        message = ex.Message
                     }
                 );
             }
@@ -196,9 +192,7 @@ namespace Web.Controllers
         {
             try
             {
-                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
-                    "accessToken"
-                ];
+                var accessToken = httpContextAccessor.HttpContext.Request.Cookies["accessToken"];
 
                 if (accessToken == null)
                     return Unauthorized(
@@ -224,7 +218,7 @@ namespace Web.Controllers
                         {
                             success = false,
                             statusCode = 403,
-                            message = "Forbidden"
+                            message = "Forbidden. Should log in with admin account."
                         }
                     );
                 }
@@ -252,12 +246,12 @@ namespace Web.Controllers
             catch (Exception ex)
             {
                 return StatusCode(
-                    403,
+                    500,
                     new
                     {
                         success = false,
-                        statusCode = 403,
-                        message = "Forbidden"
+                        statusCode = 500,
+                        message = ex.Message
                     }
                 );
             }
@@ -268,9 +262,7 @@ namespace Web.Controllers
         {
             try
             {
-                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
-                    "accessToken"
-                ];
+                var accessToken = httpContextAccessor.HttpContext.Request.Cookies["accessToken"];
 
                 if (accessToken == null)
                     return Unauthorized(
@@ -296,7 +288,7 @@ namespace Web.Controllers
                         {
                             success = false,
                             statusCode = 403,
-                            message = "Forbidden"
+                            message = "Forbidden. Should log in with admin account."
                         }
                     );
                 }
@@ -324,12 +316,12 @@ namespace Web.Controllers
             catch (Exception ex)
             {
                 return StatusCode(
-                    403,
+                    500,
                     new
                     {
                         success = false,
-                        statusCode = 403,
-                        message = "Forbidden"
+                        statusCode = 500,
+                        message = ex.Message
                     }
                 );
             }
