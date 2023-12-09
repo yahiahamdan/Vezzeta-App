@@ -107,5 +107,88 @@ namespace Web.Controllers
                 );
             }
         }
+
+        [HttpPut("{discountId:int}")]
+        public IActionResult UpdateDiscountCode(DiscountDto discountDto, [FromRoute] int discountId)
+        {
+            try
+            {
+                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
+                    "accessToken"
+                ];
+
+                if (accessToken == null)
+                    return Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "Unauthorized"
+                        }
+                    );
+
+                var decodedToken = this.jwtHelpService.DecodeToken(accessToken);
+
+                string roleName = decodedToken.Claims
+                    .First(claim => claim.Type == "RoleName")
+                    .Value;
+
+                if (roleName != "Admin")
+                {
+                    return StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "Forbidden"
+                        }
+                    );
+                }
+
+                if (!ModelState.IsValid)
+                    return BadRequest(
+                        new
+                        {
+                            success = false,
+                            statusCode = 400,
+                            messgae = ModelState.ValidationState
+                        }
+                    );
+
+                var result = this.discountService.UpdateDiscountCode(discountDto, discountId);
+
+                if (result != "Succeeded")
+                    return BadRequest(
+                        new
+                        {
+                            success = false,
+                            statusCode = 400,
+                            result,
+                        }
+                    );
+
+                return Ok(
+                    new
+                    {
+                        success = true,
+                        statusCode = 200,
+                        message = "Discount updated successfully"
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    403,
+                    new
+                    {
+                        success = false,
+                        statusCode = 403,
+                        message = "Forbidden"
+                    }
+                );
+            }
+        }
     }
 }

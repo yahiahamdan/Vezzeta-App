@@ -45,5 +45,35 @@ namespace Infrastructure.Repositories
                 return ex.Message;
             }
         }
+
+        public string UpdateDiscountCode(DiscountDto discountDto, int discountId)
+        {
+            try
+            {
+                var discount = context.Discounts
+                    .Where(dis => dis.Id == discountId)
+                    .FirstOrDefault();
+
+                if (discount == null)
+                    return "No discount type (Percentage / Value) found to update the existing discount";
+
+                int discountTypeId = context.DiscountTypes
+                    .Where(dis => dis.Name == discountDto.DiscountType)
+                    .Select(dis => dis.Id)
+                    .FirstOrDefault();
+
+                discount.DiscountValue = discountDto.DiscountValue;
+                discount.DiscountCode = discountDto.DiscountCode;
+                discount.DiscountTypeId = discountTypeId;
+
+                this.context.SaveChanges();
+
+                return "Succeeded";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }

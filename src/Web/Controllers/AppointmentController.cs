@@ -128,7 +128,7 @@ namespace Web.Controllers
             }
         }
 
-        [HttpPatch("{appointmentTimeId}:int")]
+        [HttpPatch("{appointmentTimeId:int}")]
         public async Task<IActionResult> UpdateAppointmentTimeById(
             [FromBody] UpdateAppointmentTimeDto updateAppointmentTimeDto,
             [FromRoute] int appointmentTimeId

@@ -33,5 +33,25 @@ namespace Infrastructure.Services
                 return ex.Message;
             }
         }
+
+        public string UpdateDiscountCode(DiscountDto discountDto, int discountId)
+        {
+            try
+            {
+                if (
+                    discountDto.DiscountType == DiscountTypesEnum.Percentage.ToString()
+                    && discountDto.DiscountValue == 100
+                )
+                    return "Discount value can't be 100%";
+
+                var result = this.discountRepository.UpdateDiscountCode(discountDto, discountId);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }
