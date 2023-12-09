@@ -209,7 +209,11 @@ namespace Infrastructure.Repositories
                     .Where(appointment => appointment.Id == appointmentTime.AppointmentId)
                     .FirstOrDefault();
 
-                if (appointment == null || appointment.DoctorId != doctorId)
+                if (
+                    appointment == null
+                    || appointment.DoctorId != doctorId
+                    || appointmentTime.IsBooked == true
+                )
                     return "Forbidden";
 
                 var time = this.context.Times
