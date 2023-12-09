@@ -262,5 +262,77 @@ namespace Web.Controllers
                 );
             }
         }
+
+        [HttpPatch("{discountId:int}")]
+        public IActionResult DeActivateDiscountCode([FromRoute] int discountId)
+        {
+            try
+            {
+                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
+                    "accessToken"
+                ];
+
+                if (accessToken == null)
+                    return Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "Unauthorized"
+                        }
+                    );
+
+                var decodedToken = this.jwtHelpService.DecodeToken(accessToken);
+
+                string roleName = decodedToken.Claims
+                    .First(claim => claim.Type == "RoleName")
+                    .Value;
+
+                if (roleName != "Admin")
+                {
+                    return StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "Forbidden"
+                        }
+                    );
+                }
+                var result = this.discountService.DeActivateDiscount(discountId);
+
+                if (result != "Succeeded")
+                    return BadRequest(
+                        new
+                        {
+                            success = false,
+                            statusCode = 400,
+                            result,
+                        }
+                    );
+
+                return Ok(
+                    new
+                    {
+                        success = true,
+                        statusCode = 200,
+                        message = "Discount code deactivated"
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    403,
+                    new
+                    {
+                        success = false,
+                        statusCode = 403,
+                        message = "Forbidden"
+                    }
+                );
+            }
+        }
     }
 }

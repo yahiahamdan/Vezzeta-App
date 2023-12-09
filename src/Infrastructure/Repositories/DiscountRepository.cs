@@ -97,5 +97,27 @@ namespace Infrastructure.Repositories
                 return ex.Message;
             }
         }
+
+        public string DeActivateDiscountCode(int discountId)
+        {
+            try
+            {
+                var discount = context.Discounts
+                    .Where(dis => dis.Id == discountId)
+                    .FirstOrDefault();
+
+                if (discount == null)
+                    return "No discount found with the given Id";
+
+                discount.IsActivated = false;
+                this.context.SaveChanges();
+
+                return "Succeeded";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }
