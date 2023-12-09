@@ -9,5 +9,10 @@ namespace Application.Interfaces.Repositories
         public List<int> GetDaysIds(AppointmentDto appointmentDto);
         public List<int> AddNewAppointment(AppointmentDto appointmentDto, string doctorId);
         public string AddNewAppointmentTime(AppointmentDto appointmentDto, string doctorId);
+        public string UpdateAppointmentTimeById(
+            UpdateAppointmentTimeDto updateAppointmentTimeDto,
+            int appointmentTimeId,
+            string doctorId
+        );
     }
 }

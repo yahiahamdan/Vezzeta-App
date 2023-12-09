@@ -127,5 +127,99 @@ namespace Web.Controllers
                 );
             }
         }
+
+        [HttpPatch("{appointmentTimeId}:int")]
+        public async Task<IActionResult> UpdateAppointmentTime(
+            [FromBody] UpdateAppointmentTimeDto updateAppointmentTimeDto,
+            [FromRoute] int appointmentTimeId
+        )
+        {
+            try
+            {
+                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
+                    "accessToken"
+                ];
+
+                if (accessToken == null)
+                    return Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "Unauthorized"
+                        }
+                    );
+
+                var decodedToken = this.jwtHelpService.DecodeToken(accessToken);
+
+                string doctorId = decodedToken.Claims.First(claim => claim.Type == "UserId").Value;
+                string roleName = decodedToken.Claims
+                    .First(claim => claim.Type == "RoleName")
+                    .Value;
+
+                if (roleName != "Doctor")
+                {
+                    return StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "Forbidden"
+                        }
+                    );
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(
+                        new
+                        {
+                            success = false,
+                            statusCode = 400,
+                            messgae = ModelState.ValidationState
+                        }
+                    );
+                }
+
+                var result = this.appointmentService.UpdateAppointmentTime(
+                    updateAppointmentTimeDto,
+                    appointmentTimeId,
+                    doctorId
+                );
+
+                if (result != "Succeeded")
+                    return StatusCode(
+                        500,
+                        new
+                        {
+                            success = false,
+                            statusCode = 500,
+                            messgae = result
+                        }
+                    );
+
+                return Ok(
+                    new
+                    {
+                        success = true,
+                        statusCode = 201,
+                        messgae = "Appointment updated successfully.",
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    new
+                    {
+                        success = false,
+                        statusCOde = 500,
+                        messgae = ex.Message
+                    }
+                );
+            }
+        }
     }
 }

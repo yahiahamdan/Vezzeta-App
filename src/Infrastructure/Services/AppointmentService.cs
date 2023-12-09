@@ -24,5 +24,27 @@ namespace Infrastructure.Services
                 return ex.Message;
             }
         }
+
+        public string UpdateAppointmentTime(
+            UpdateAppointmentTimeDto updateAppointmentTimeDto,
+            int appointmentTimeId,
+            string doctorId
+        )
+        {
+            try
+            {
+                var result = this.appointmentRepository.UpdateAppointmentTimeById(
+                    updateAppointmentTimeDto,
+                    appointmentTimeId,
+                    doctorId
+                );
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }

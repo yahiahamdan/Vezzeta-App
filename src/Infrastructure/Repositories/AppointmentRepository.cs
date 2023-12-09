@@ -189,5 +189,55 @@ namespace Infrastructure.Repositories
                 return ex.Message;
             }
         }
+
+        public string UpdateAppointmentTimeById(
+            UpdateAppointmentTimeDto updateAppointmentTimeDto,
+            int appointmentTimeId,
+            string doctorId
+        )
+        {
+            try
+            {
+                var appointmentTime = this.context.AppointmentTimes
+                    .Where(appTime => appTime.Id == appointmentTimeId)
+                    .FirstOrDefault();
+
+                if (appointmentTime == null)
+                    return "No AppointmentTime found with the given Id.";
+
+                var appointment = this.context.Appointments
+                    .Where(appointment => appointment.DoctorId == doctorId)
+                    .FirstOrDefault();
+
+                if (appointment == null)
+                    return "Forbidden";
+
+                var time = this.context.Times
+                    .Where(time => time.TimeValue == updateAppointmentTimeDto.Time)
+                    .Select(time => new { time.TimeValue, time.Id })
+                    .FirstOrDefault();
+
+                if (time == null)
+                {
+                    Time newTime = new Time { TimeValue = updateAppointmentTimeDto.Time };
+
+                    this.context.Times.Add(newTime);
+                    this.context.SaveChanges();
+
+                    appointmentTime.TimeId = newTime.Id;
+                }
+                else
+                {
+                    appointmentTime.TimeId = time.Id;
+                }
+
+                this.context.SaveChanges();
+                return "Succeeded";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }
