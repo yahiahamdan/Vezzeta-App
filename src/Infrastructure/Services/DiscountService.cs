@@ -53,5 +53,19 @@ namespace Infrastructure.Services
                 return ex.Message;
             }
         }
+
+        public string DeleteDiscount(int discountId)
+        {
+            try
+            {
+                var result = this.discountRepository.DeleteDiscountCode(discountId);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }

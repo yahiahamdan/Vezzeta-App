@@ -6,5 +6,6 @@ namespace Application.Interfaces.Repositories
     {
         public string CreateNewDiscount(DiscountDto discountDto);
         public string UpdateDiscountCode(DiscountDto discountDto, int discountId);
+        public string DeleteDiscountCode(int discountId);
     }
 }

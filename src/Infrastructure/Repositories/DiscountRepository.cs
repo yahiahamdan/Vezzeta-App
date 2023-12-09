@@ -55,7 +55,7 @@ namespace Infrastructure.Repositories
                     .FirstOrDefault();
 
                 if (discount == null)
-                    return "No discount type (Percentage / Value) found to update the existing discount";
+                    return "No discount found with the given Id";
 
                 int discountTypeId = context.DiscountTypes
                     .Where(dis => dis.Name == discountDto.DiscountType)
@@ -66,6 +66,28 @@ namespace Infrastructure.Repositories
                 discount.DiscountCode = discountDto.DiscountCode;
                 discount.DiscountTypeId = discountTypeId;
 
+                this.context.SaveChanges();
+
+                return "Succeeded";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public string DeleteDiscountCode(int discountId)
+        {
+            try
+            {
+                var discount = context.Discounts
+                    .Where(dis => dis.Id == discountId)
+                    .FirstOrDefault();
+
+                if (discount == null)
+                    return "No discount found with the given Id";
+
+                this.context.Discounts.Remove(discount);
                 this.context.SaveChanges();
 
                 return "Succeeded";

@@ -222,7 +222,7 @@ namespace Web.Controllers
             }
         }
 
-        [HttpDelete("{appointmentTimeId}:int")]
+        [HttpDelete("{appointmentTimeId:int}")]
         public async Task<IActionResult> DeleteAppointmentTimeById(
             [FromRoute] int appointmentTimeId
         )
