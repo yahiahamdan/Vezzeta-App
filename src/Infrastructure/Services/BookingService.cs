@@ -58,6 +58,21 @@ namespace Infrastructure.Services
                 )
                     return "Forbidden. The booking status has been officially confirmed or cancelled";
 
+                var userBookingTracking = this.bookingRepository.GetUserBookingTracking(
+                    booking.PatientId
+                );
+
+                if (userBookingTracking == null)
+                    this.bookingRepository.AddNewBookingTracking(booking.PatientId);
+                else
+                    this.bookingRepository.UpdateUserBookingTracking(userBookingTracking);
+
+                var appointmentTime = this.bookingRepository.GetAppointmentTimeById(
+                    booking.AppointmentTimeId
+                );
+
+                this.bookingRepository.UpdateAppointmentTime(appointmentTime);
+
                 var completedStatusId = this.bookingRepository.GetBookingStatusId("Completed");
 
                 this.bookingRepository.ConfirmBooking(booking, completedStatusId);

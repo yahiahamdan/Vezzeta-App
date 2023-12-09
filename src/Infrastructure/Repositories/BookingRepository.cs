@@ -205,6 +205,38 @@ namespace Infrastructure.Repositories
             return bookingStatus;
         }
 
+        public UserBookingTracking GetUserBookingTracking(string patientId)
+        {
+            var userBookingTracking = this.context.UserBookingTrackings
+                .Where(userBooking => userBooking.PatientId == patientId)
+                .FirstOrDefault();
+
+            return userBookingTracking;
+        }
+
+        public void UpdateUserBookingTracking(UserBookingTracking userBookingTracking)
+        {
+            userBookingTracking.ApprovedBookingCount += 1;
+            this.context.SaveChanges();
+        }
+
+        public void AddNewBookingTracking(string patientId)
+        {
+            var userBookingTracking = new UserBookingTracking
+            {
+                PatientId = patientId,
+                ApprovedBookingCount = 1
+            };
+            this.context.UserBookingTrackings.Add(userBookingTracking);
+            this.context.SaveChanges();
+        }
+
+        public void UpdateAppointmentTime(AppointmentTime appointmentTime)
+        {
+            appointmentTime.IsBooked = true;
+            this.context.SaveChanges();
+        }
+
         public void ConfirmBooking(Booking booking, int statusId)
         {
             booking.StatusId = statusId;

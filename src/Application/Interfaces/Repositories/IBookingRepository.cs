@@ -9,6 +9,10 @@ namespace Application.Interfaces.Repositories
         public int GetBookingStatusId(string bookingStatusName);
         public Discount GetDiscountByCodeName(DiscountCodeCouponDto discountCodeCouponDto);
         public AppointmentTime GetAppointmentTimeById(int appointmentTimeId);
+        public UserBookingTracking GetUserBookingTracking(string patientId);
+        public void AddNewBookingTracking(string patientId);
+        public void UpdateUserBookingTracking(UserBookingTracking userBookingTracking);
+        public void UpdateAppointmentTime(AppointmentTime appointmentTime);
         public Appointment GetAppointmentById(int appointmentTimeId);
         public int GetDoctorExaminationPrice(string doctorId);
         public void ConfirmBooking(Booking booking, int statusId);
