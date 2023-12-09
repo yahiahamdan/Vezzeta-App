@@ -14,5 +14,6 @@ namespace Application.Interfaces.Repositories
             int appointmentTimeId,
             string doctorId
         );
+        public string DeleteAppointmentTimeById(int appointmentTimeId, string doctorId);
     }
 }

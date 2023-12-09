@@ -129,7 +129,7 @@ namespace Web.Controllers
         }
 
         [HttpPatch("{appointmentTimeId}:int")]
-        public async Task<IActionResult> UpdateAppointmentTime(
+        public async Task<IActionResult> UpdateAppointmentTimeById(
             [FromBody] UpdateAppointmentTimeDto updateAppointmentTimeDto,
             [FromRoute] int appointmentTimeId
         )
@@ -182,7 +182,7 @@ namespace Web.Controllers
                     );
                 }
 
-                var result = this.appointmentService.UpdateAppointmentTime(
+                var result = this.appointmentService.UpdateAppointmentTimeById(
                     updateAppointmentTimeDto,
                     appointmentTimeId,
                     doctorId
@@ -205,6 +205,86 @@ namespace Web.Controllers
                         success = true,
                         statusCode = 201,
                         messgae = "Appointment updated successfully.",
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    new
+                    {
+                        success = false,
+                        statusCOde = 500,
+                        messgae = ex.Message
+                    }
+                );
+            }
+        }
+
+        [HttpDelete("{appointmentTimeId}:int")]
+        public async Task<IActionResult> DeleteAppointmentTimeById(
+            [FromRoute] int appointmentTimeId
+        )
+        {
+            try
+            {
+                string accessToken = this.httpContextAccessor.HttpContext.Request.Cookies[
+                    "accessToken"
+                ];
+
+                if (accessToken == null)
+                    return Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "Unauthorized"
+                        }
+                    );
+
+                var decodedToken = this.jwtHelpService.DecodeToken(accessToken);
+
+                string doctorId = decodedToken.Claims.First(claim => claim.Type == "UserId").Value;
+                string roleName = decodedToken.Claims
+                    .First(claim => claim.Type == "RoleName")
+                    .Value;
+
+                if (roleName != "Doctor")
+                {
+                    return StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "Forbidden"
+                        }
+                    );
+                }
+
+                var result = this.appointmentService.DeleteAppointmentTimeById(
+                    appointmentTimeId,
+                    doctorId
+                );
+
+                if (result != "Succeeded")
+                    return StatusCode(
+                        500,
+                        new
+                        {
+                            success = false,
+                            statusCode = 500,
+                            messgae = result
+                        }
+                    );
+
+                return Ok(
+                    new
+                    {
+                        success = true,
+                        statusCode = 201,
+                        messgae = "Appointment deleted successfully.",
                     }
                 );
             }

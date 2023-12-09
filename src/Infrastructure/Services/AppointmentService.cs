@@ -25,7 +25,7 @@ namespace Infrastructure.Services
             }
         }
 
-        public string UpdateAppointmentTime(
+        public string UpdateAppointmentTimeById(
             UpdateAppointmentTimeDto updateAppointmentTimeDto,
             int appointmentTimeId,
             string doctorId
@@ -35,6 +35,23 @@ namespace Infrastructure.Services
             {
                 var result = this.appointmentRepository.UpdateAppointmentTimeById(
                     updateAppointmentTimeDto,
+                    appointmentTimeId,
+                    doctorId
+                );
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public string DeleteAppointmentTimeById(int appointmentTimeId, string doctorId)
+        {
+            try
+            {
+                var result = this.appointmentRepository.DeleteAppointmentTimeById(
                     appointmentTimeId,
                     doctorId
                 );

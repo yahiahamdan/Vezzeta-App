@@ -206,10 +206,10 @@ namespace Infrastructure.Repositories
                     return "No AppointmentTime found with the given Id.";
 
                 var appointment = this.context.Appointments
-                    .Where(appointment => appointment.DoctorId == doctorId)
+                    .Where(appointment => appointment.Id == appointmentTime.AppointmentId)
                     .FirstOrDefault();
 
-                if (appointment == null)
+                if (appointment == null || appointment.DoctorId != doctorId)
                     return "Forbidden";
 
                 var time = this.context.Times
@@ -232,6 +232,39 @@ namespace Infrastructure.Repositories
                 }
 
                 this.context.SaveChanges();
+                return "Succeeded";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public string DeleteAppointmentTimeById(int appointmentTimeId, string doctorId)
+        {
+            try
+            {
+                var appointmentTime = this.context.AppointmentTimes
+                    .Where(appTime => appTime.Id == appointmentTimeId)
+                    .FirstOrDefault();
+
+                if (appointmentTime == null)
+                    return "No AppointmentTime found with the given Id.";
+
+                var appointment = this.context.Appointments
+                    .Where(appointment => appointment.Id == appointmentTime.AppointmentId)
+                    .FirstOrDefault();
+
+                if (
+                    appointment == null
+                    || appointment.DoctorId != doctorId
+                    || appointmentTime.IsBooked == true
+                )
+                    return "Forbidden";
+
+                this.context.AppointmentTimes.Remove(appointmentTime);
+                this.context.SaveChanges();
+
                 return "Succeeded";
             }
             catch (Exception ex)
