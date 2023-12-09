@@ -27,6 +27,7 @@ namespace Infrastructure.Database.Seeding
             await SeedDaysEntity(applicationBuilder);
             await SeedBookingStatusEntity(applicationBuilder);
             await SeedSpecializationsEntity(applicationBuilder);
+            await SeedDiscountTypesEntity(applicationBuilder);
         }
 
         public async static Task SeedAspNetRoles(RoleManager<IdentityRole> roleManager)
@@ -52,6 +53,11 @@ namespace Infrastructure.Database.Seeding
         public async static Task SeedSpecializationsEntity(IApplicationBuilder applicationBuilder)
         {
             await SpecializationsSeeding.SeedSpecializationsEntity(applicationBuilder);
+        }
+
+        public async static Task SeedDiscountTypesEntity(IApplicationBuilder applicationBuilder)
+        {
+            await DiscountTypesSeeding.SeedDiscountTypesEntity(applicationBuilder);
         }
     }
 }
