@@ -15,7 +15,7 @@ namespace Application.Interfaces.Repositories
         public void UpdateAppointmentTime(AppointmentTime appointmentTime);
         public Appointment GetAppointmentById(int appointmentTimeId);
         public int GetDoctorExaminationPrice(string doctorId);
-        public void ConfirmBooking(Booking booking, int statusId);
+        public void UpdateBookingStatus(Booking booking, int statusId);
         public BookingStatus GetBookingStatusById(int bookingStatusId);
         public Booking GetBookingById(int bookingId);
         public string AddNewBooking(

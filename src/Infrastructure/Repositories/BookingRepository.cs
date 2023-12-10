@@ -240,7 +240,7 @@ namespace Infrastructure.Repositories
             this.context.SaveChanges();
         }
 
-        public void ConfirmBooking(Booking booking, int statusId)
+        public void UpdateBookingStatus(Booking booking, int statusId)
         {
             booking.StatusId = statusId;
             this.context.SaveChanges();

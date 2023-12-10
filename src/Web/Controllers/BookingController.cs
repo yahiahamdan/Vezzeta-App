@@ -112,7 +112,7 @@ namespace Web.Controllers
             }
         }
 
-        [HttpPost("{bookingId}/confirm-checkup")]
+        [HttpPatch("{bookingId}/confirm-checkup")]
         public IActionResult ConfirmBooking([FromRoute] int bookingId)
         {
             try
@@ -160,13 +160,83 @@ namespace Web.Controllers
                         }
                     );
 
-                return Created(
-                    "Booking created successfully.",
+                return Ok(
                     new
                     {
                         success = true,
-                        statusCode = 201,
+                        statusCode = 200,
                         messgae = "Booking confirmed successfully.",
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    new
+                    {
+                        success = false,
+                        statusCode = 500,
+                        messgae = ex.Message
+                    }
+                );
+            }
+        }
+
+        [HttpPatch("{bookingId}")]
+        public IActionResult CancelBooking([FromRoute] int bookingId)
+        {
+            try
+            {
+                var accessToken = httpContextAccessor.HttpContext.Request.Cookies["accessToken"];
+
+                if (accessToken == null)
+                    return Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "Unauthorized"
+                        }
+                    );
+
+                var decodedToken = this.jwtHelpService.DecodeToken(accessToken);
+
+                string roleName = decodedToken.Claims
+                    .First(claim => claim.Type == "RoleName")
+                    .Value;
+
+                string userId = decodedToken.Claims.First(claim => claim.Type == "UserId").Value;
+
+                if (roleName != "Doctor")
+                    return StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "Forbidden. Should log in with doctor account."
+                        }
+                    );
+
+                var result = this.bookingService.CancelBooking(userId, bookingId);
+
+                if (result != "Succeeded")
+                    return BadRequest(
+                        new
+                        {
+                            success = false,
+                            statusCode = 500,
+                            message = result
+                        }
+                    );
+
+                return Ok(
+                    new
+                    {
+                        success = true,
+                        statusCode = 200,
+                        messgae = "Booking cancelled successfully.",
                     }
                 );
             }

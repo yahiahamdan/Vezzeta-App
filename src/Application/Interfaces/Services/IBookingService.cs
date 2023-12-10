@@ -10,5 +10,6 @@ namespace Application.Interfaces.Services
             DiscountCodeCouponDto discountCodeCouponDto
         );
         public string ConfirmBooking(string doctorId, int bookingId);
+        public string CancelBooking(string doctorId, int bookingId);
     }
 }
