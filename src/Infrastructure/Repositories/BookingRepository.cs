@@ -91,6 +91,18 @@ namespace Infrastructure.Repositories
             return discountType;
         }
 
+        public bool IsAppointmentTimeBooked(int appointmentTimeId)
+        {
+            var booking = this.context.Bookings
+                .Where(booking => booking.AppointmentTimeId == appointmentTimeId)
+                .FirstOrDefault();
+
+            if (booking == null)
+                return false;
+
+            return true;
+        }
+
         public string AddNewBooking(
             string patientId,
             int appointmentTimeId,
@@ -305,6 +317,19 @@ namespace Infrastructure.Repositories
                             discountCode = booking.Discount.DiscountCode
                         }
                 );
+
+            return bookings;
+        }
+
+        public object GetAllBookingsForDoctor(string doctorId, int page, int limit)
+        {
+            var bookings = this.context.Appointments
+                .Where(appointment => appointment.DoctorId == doctorId)
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .Include(appointment => appointment.AppointmentTimes)
+                .ThenInclude(appointmentTimes => appointmentTimes.Booking)
+                .ThenInclude(booking => booking.Patient);
 
             return bookings;
         }

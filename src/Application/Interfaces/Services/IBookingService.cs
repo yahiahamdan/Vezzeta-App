@@ -13,5 +13,6 @@ namespace Application.Interfaces.Services
         public string CancelBooking(string doctorId, int bookingId);
         public object GetCountOfBookings();
         public (object, int) GetAllBookingsForPatient(string patientId, int page, int limit);
+        public (object, int) GetAllBookingsForDoctor(string patientId, int page, int limit);
     }
 }

@@ -11,7 +11,9 @@ namespace Application.Interfaces.Repositories
         public AppointmentTime GetAppointmentTimeById(int appointmentTimeId);
         public UserBookingTracking GetUserBookingTracking(string patientId);
         public void AddNewBookingTracking(string patientId);
+        public bool IsAppointmentTimeBooked(int appointmentTimeId);
         public void UpdateUserBookingTracking(UserBookingTracking userBookingTracking);
+        public object GetAllBookingsForDoctor(string doctorId, int page, int limit);
         public void UpdateAppointmentTime(AppointmentTime appointmentTime);
         public Appointment GetAppointmentById(int appointmentTimeId);
         public int GetDoctorExaminationPrice(string doctorId);

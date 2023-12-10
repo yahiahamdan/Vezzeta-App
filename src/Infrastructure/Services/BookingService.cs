@@ -21,11 +21,25 @@ namespace Infrastructure.Services
         {
             try
             {
+                var isAppointmentBooked = bookingRepository.IsAppointmentTimeBooked(
+                    appointmentTimeId
+                );
+
+                if (isAppointmentBooked)
+                    return "Appointment time is already booked";
+
+                var appointmentTime = bookingRepository.GetAppointmentTimeById(appointmentTimeId);
+
+                if (appointmentTime == null)
+                    return "No appointment time with the given Id";
+
                 var result = bookingRepository.AddNewBooking(
                     patientId,
                     appointmentTimeId,
                     discountCodeCouponDto
                 );
+
+                this.bookingRepository.UpdateAppointmentTime(appointmentTime);
                 return result;
             }
             catch (Exception ex)
@@ -141,6 +155,17 @@ namespace Infrastructure.Services
         public (object, int) GetAllBookingsForPatient(string patientId, int page, int limit)
         {
             var bookings = this.bookingRepository.GetAllBookingsForPatient(patientId, page, limit);
+            int countOfBookings = this.bookingRepository.GetTotalBookingsCount();
+
+            if (bookings == null || countOfBookings == 0)
+                return ("No bookings found.", 0);
+
+            return (bookings, countOfBookings);
+        }
+
+        public (object, int) GetAllBookingsForDoctor(string doctorId, int page, int limit)
+        {
+            var bookings = this.bookingRepository.GetAllBookingsForDoctor(doctorId, page, limit);
             int countOfBookings = this.bookingRepository.GetTotalBookingsCount();
 
             if (bookings == null || countOfBookings == 0)
