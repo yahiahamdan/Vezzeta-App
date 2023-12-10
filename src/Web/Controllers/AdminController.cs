@@ -685,9 +685,6 @@ namespace Web.Controllers
                 var totalDoctorsCount = await this.doctorService.GetCountOfDoctors(
                     RolesEnum.Doctor.ToString()
                 );
-                Console.WriteLine(totalDoctorsCount);
-
-                Console.WriteLine(5000000000);
 
                 if (doctors.Count == 0 || totalDoctorsCount == 0)
                     return Ok(

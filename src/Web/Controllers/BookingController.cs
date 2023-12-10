@@ -319,5 +319,74 @@ namespace Web.Controllers
                 );
             }
         }
+
+        [HttpGet("patients")]
+        public IActionResult GetAllBookingsForPatient([FromQuery] int page, [FromQuery] int limit)
+        {
+            try
+            {
+                var accessToken = httpContextAccessor.HttpContext.Request.Cookies["accessToken"];
+
+                if (accessToken == null)
+                    return Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "Unauthorized"
+                        }
+                    );
+
+                var decodedToken = this.jwtHelpService.DecodeToken(accessToken);
+
+                string roleName = decodedToken.Claims
+                    .First(claim => claim.Type == "RoleName")
+                    .Value;
+
+                string userId = decodedToken.Claims.First(claim => claim.Type == "UserId").Value;
+                Console.WriteLine(userId);
+                if (roleName != "Patient")
+                    return StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "Forbidden. Should log in with patient account."
+                        }
+                    );
+
+                var (bookings, totalBookingsCount) = this.bookingService.GetAllBookingsForPatient(
+                    userId,
+                    page,
+                    limit
+                );
+
+                return Ok(
+                    new
+                    {
+                        succuss = true,
+                        statusCode = 200,
+                        totalBookingsCount,
+                        maxPages = (int)Math.Ceiling((decimal)totalBookingsCount / limit),
+                        currentPage = page,
+                        bookingsPerPage = limit,
+                        bookings
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    new
+                    {
+                        success = false,
+                        statusCode = 500,
+                        messgae = ex.Message
+                    }
+                );
+            }
+        }
     }
 }

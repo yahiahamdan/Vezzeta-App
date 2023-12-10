@@ -4,6 +4,7 @@ using Core.Enums;
 using Core.Models;
 using Infrastructure.Database.Context;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -270,6 +271,47 @@ namespace Infrastructure.Repositories
             countOfBookings.Add(cancelledRequests);
 
             return countOfBookings;
+        }
+
+        public object GetAllBookingsForPatient(string patientId, int page, int limit)
+        {
+            var bookings = this.context.Bookings
+                .Where(booking => booking.PatientId == patientId)
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .Include(booking => booking.AppointmentTime)
+                .ThenInclude(appointmentTime => appointmentTime.Appointment)
+                .ThenInclude(appointment => appointment.Doctor)
+                .ThenInclude(doctor => doctor.Specialization)
+                .Include(booking => booking.AppointmentTime)
+                .ThenInclude(appointmentTime => appointmentTime.Appointment)
+                .ThenInclude(appointment => appointment.Day)
+                .Include(booking => booking.AppointmentTime)
+                .ThenInclude(appointmentTime => appointmentTime.Time)
+                .Include(booking => booking.BookingStatus)
+                .Include(booking => booking.Discount)
+                .Select(
+                    booking =>
+                        new
+                        {
+                            doctorName = $"{booking.AppointmentTime.Appointment.Doctor.FirstName} {booking.AppointmentTime.Appointment.Doctor.LastName}",
+                            image = booking.AppointmentTime.Appointment.Doctor.Image,
+                            specialization = booking.AppointmentTime.Appointment.Doctor.Specialization.Title.ToString(),
+                            day = booking.AppointmentTime.Appointment.Day.Name.ToString(),
+                            time = booking.AppointmentTime.Time.TimeValue,
+                            booking.Price,
+                            booking.FinalPrice,
+                            statusName = booking.BookingStatus.Name.ToString(),
+                            discountCode = booking.Discount.DiscountCode
+                        }
+                );
+
+            return bookings;
+        }
+
+        public int GetTotalBookingsCount()
+        {
+            return this.context.Bookings.Count();
         }
     }
 }

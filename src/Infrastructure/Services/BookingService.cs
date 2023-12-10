@@ -137,5 +137,16 @@ namespace Infrastructure.Services
                 return ex.Message;
             }
         }
+
+        public (object, int) GetAllBookingsForPatient(string patientId, int page, int limit)
+        {
+            var bookings = this.bookingRepository.GetAllBookingsForPatient(patientId, page, limit);
+            int countOfBookings = this.bookingRepository.GetTotalBookingsCount();
+
+            if (bookings == null || countOfBookings == 0)
+                return ("No bookings found.", 0);
+
+            return (bookings, countOfBookings);
+        }
     }
 }

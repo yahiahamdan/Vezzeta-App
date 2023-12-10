@@ -17,6 +17,8 @@ namespace Application.Interfaces.Repositories
         public int GetDoctorExaminationPrice(string doctorId);
         public List<int> GetCountOfBookings();
         public void UpdateBookingStatus(Booking booking, int statusId);
+        public int GetTotalBookingsCount();
+        public object GetAllBookingsForPatient(string patientId, int page, int limit);
         public BookingStatus GetBookingStatusById(int bookingStatusId);
         public Booking GetBookingById(int bookingId);
         public string AddNewBooking(
