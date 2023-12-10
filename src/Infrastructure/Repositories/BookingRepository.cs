@@ -140,6 +140,9 @@ namespace Infrastructure.Repositories
                                     FinalPrice = finalPrice,
                                 }
                             );
+
+                            var userBookingTracking = this.GetUserBookingTracking(patientId);
+                            userBookingTracking.ApprovedBookingCount = 0;
                         }
                         else
                         {
