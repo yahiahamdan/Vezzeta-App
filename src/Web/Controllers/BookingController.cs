@@ -79,7 +79,8 @@ namespace Web.Controllers
                 );
 
                 if (result != "Succeeded")
-                    return BadRequest(
+                    return StatusCode(
+                        500,
                         new
                         {
                             success = false,
@@ -151,7 +152,8 @@ namespace Web.Controllers
                 var result = this.bookingService.ConfirmBooking(userId, bookingId);
 
                 if (result != "Succeeded")
-                    return BadRequest(
+                    return StatusCode(
+                        500,
                         new
                         {
                             success = false,
@@ -222,7 +224,8 @@ namespace Web.Controllers
                 var result = this.bookingService.CancelBooking(userId, bookingId);
 
                 if (result != "Succeeded")
-                    return BadRequest(
+                    return StatusCode(
+                        500,
                         new
                         {
                             success = false,
@@ -237,6 +240,69 @@ namespace Web.Controllers
                         success = true,
                         statusCode = 200,
                         messgae = "Booking cancelled successfully.",
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    new
+                    {
+                        success = false,
+                        statusCode = 500,
+                        messgae = ex.Message
+                    }
+                );
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetCountOfBookings()
+        {
+            try
+            {
+                var accessToken = httpContextAccessor.HttpContext.Request.Cookies["accessToken"];
+
+                if (accessToken == null)
+                    return Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "Unauthorized"
+                        }
+                    );
+
+                var decodedToken = this.jwtHelpService.DecodeToken(accessToken);
+
+                string roleName = decodedToken.Claims
+                    .First(claim => claim.Type == "RoleName")
+                    .Value;
+
+                string userId = decodedToken.Claims.First(claim => claim.Type == "UserId").Value;
+
+                if (roleName != "Admin")
+                    return StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "Forbidden. Should log in with admin account."
+                        }
+                    );
+
+                var result = (List<int>)this.bookingService.GetCountOfBookings();
+
+                return Ok(
+                    new
+                    {
+                        success = true,
+                        statusCode = 200,
+                        pendingRequests = result[0],
+                        confirmedRequests = result[1],
+                        cancelledRequests = result[2],
                     }
                 );
             }

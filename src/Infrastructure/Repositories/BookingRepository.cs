@@ -245,5 +245,31 @@ namespace Infrastructure.Repositories
             booking.StatusId = statusId;
             this.context.SaveChanges();
         }
+
+        public List<int> GetCountOfBookings()
+        {
+            int pendingRequests = 0;
+            int completedRequests = 0;
+            int cancelledRequests = 0;
+            List<int> countOfBookings = new List<int>();
+
+            var bookings = this.context.Bookings;
+
+            foreach (var booking in bookings)
+            {
+                if (booking.StatusId == 1)
+                    pendingRequests++;
+                else if (booking.StatusId == 2)
+                    completedRequests++;
+                else
+                    cancelledRequests++;
+            }
+
+            countOfBookings.Add(pendingRequests);
+            countOfBookings.Add(completedRequests);
+            countOfBookings.Add(cancelledRequests);
+
+            return countOfBookings;
+        }
     }
 }

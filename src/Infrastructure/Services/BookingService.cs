@@ -120,5 +120,22 @@ namespace Infrastructure.Services
                 return ex.Message;
             }
         }
+
+        public object GetCountOfBookings()
+        {
+            try
+            {
+                List<int> countOfBookings = this.bookingRepository.GetCountOfBookings();
+
+                if (countOfBookings.Count == 0)
+                    return "No bookings found.";
+
+                return countOfBookings;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }

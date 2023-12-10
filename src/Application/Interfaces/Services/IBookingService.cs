@@ -11,5 +11,6 @@ namespace Application.Interfaces.Services
         );
         public string ConfirmBooking(string doctorId, int bookingId);
         public string CancelBooking(string doctorId, int bookingId);
+        public object GetCountOfBookings();
     }
 }
