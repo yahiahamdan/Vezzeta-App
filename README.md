@@ -49,7 +49,7 @@ $ dotnet ef database update
     "Audience": "Your-Audience"
   },
   "MailSettings": {
-    "RealMail": "mohmedeprahem2014@gmail.com",
+    "RealMail": "sragmahmoud4@gmail.com",
     "host": "smtp.gmail.com",
     "Password": "Your Password",
     "Port": 587
