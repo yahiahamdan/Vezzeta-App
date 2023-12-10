@@ -44,6 +44,11 @@ namespace Infrastructure.Services
                 )
                     return "Discount value can't be 100%";
 
+                var booking = this.discountRepository.GetBookingByDiscountId(discountId);
+
+                if (booking != null)
+                    return "Discount code is unalterable. already booked.";
+
                 var result = this.discountRepository.UpdateDiscountCode(discountDto, discountId);
 
                 return result;
@@ -60,6 +65,11 @@ namespace Infrastructure.Services
             {
                 var result = this.discountRepository.DeleteDiscountCode(discountId);
 
+                var booking = this.discountRepository.GetBookingByDiscountId(discountId);
+
+                if (booking != null)
+                    return "Discount code is unalterable. already booked.";
+
                 return result;
             }
             catch (Exception ex)
@@ -73,6 +83,11 @@ namespace Infrastructure.Services
             try
             {
                 var result = this.discountRepository.DeActivateDiscountCode(discountId);
+
+                var booking = this.discountRepository.GetBookingByDiscountId(discountId);
+
+                if (booking != null)
+                    return "Discount code is unalterable. already booked.";
 
                 return result;
             }

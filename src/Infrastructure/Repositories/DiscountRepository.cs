@@ -46,6 +46,15 @@ namespace Infrastructure.Repositories
             }
         }
 
+        public Booking GetBookingByDiscountId(int discountId)
+        {
+            var booking = this.context.Bookings
+                .Where(booking => booking.DiscountId == discountId)
+                .FirstOrDefault();
+
+            return booking;
+        }
+
         public string UpdateDiscountCode(DiscountDto discountDto, int discountId)
         {
             try
