@@ -54,6 +54,11 @@ namespace Infrastructure.Repositories
             };
         }
 
+        public async Task<ApplicationUser> FindDoctorById(string doctorId)
+        {
+            return await this.userManager.FindByIdAsync(doctorId);
+        }
+
         public async Task<IdentityResult> CreateNewDoctor(
             ApplicationUser user,
             string password,
@@ -90,9 +95,9 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<IdentityResult> DeleteSingleDoctor(ApplicationUser user)
+        public async Task DeleteSingleDoctor(ApplicationUser user)
         {
-            return await this.userManager.DeleteAsync(user);
+            await this.userManager.DeleteAsync(user);
         }
 
         public async Task<(IdentityResult, string)> UpdateDoctorById(
@@ -173,6 +178,51 @@ namespace Infrastructure.Repositories
                 .ToList();
 
             return result;
+        }
+
+        public List<int> GetAppointmentsByDoctorId(string doctorId)
+        {
+            List<int> appointmentIds = new List<int>();
+
+            var appointmentsIds = this.context.Appointments
+                .Where(appointment => appointment.DoctorId == doctorId)
+                .Select(appointment => appointment.Id);
+
+            foreach (var id in appointmentsIds)
+                appointmentIds.Add(id);
+
+            return appointmentIds;
+        }
+
+        public List<int> GetAppointmentTimeByAppointmentId(List<int> appointmentIds)
+        {
+            List<int> appointmentTimeIds = new List<int>();
+            foreach (var id in appointmentIds)
+            {
+                int appointmentTimeId = this.context.AppointmentTimes
+                    .Where(appointmentTime => appointmentTime.AppointmentId == id)
+                    .Select(appointmentTime => appointmentTime.Id)
+                    .FirstOrDefault();
+
+                appointmentTimeIds.Add(appointmentTimeId);
+            }
+
+            return appointmentTimeIds;
+        }
+
+        public bool CheckUserDeletionEligibility(List<int> appointmentTimeIds)
+        {
+            foreach (var id in appointmentTimeIds)
+            {
+                var booking = this.context.Bookings
+                    .Where(booking => booking.AppointmentTimeId == id)
+                    .FirstOrDefault();
+
+                if (booking != null)
+                    return true;
+            }
+
+            return false;
         }
     }
 }

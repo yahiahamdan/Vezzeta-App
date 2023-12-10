@@ -723,5 +723,79 @@ namespace Web.Controllers
                 );
             }
         }
+
+        [HttpDelete("doctors{doctorId}")]
+        public async Task<IActionResult> DeleteDoctorById([FromRoute] string doctorId)
+        {
+            try
+            {
+                Console.WriteLine(true);
+                var accessToken = httpContextAccessor.HttpContext.Request.Cookies["accessToken"];
+
+                if (accessToken == null)
+                    return Unauthorized(
+                        new
+                        {
+                            success = false,
+                            statusCode = 401,
+                            message = "Unauthorized"
+                        }
+                    );
+
+                var decodedToken = this.jwtHelpService.DecodeToken(accessToken);
+
+                string roleName = decodedToken.Claims
+                    .First(claim => claim.Type == "RoleName")
+                    .Value;
+
+                if (roleName != "Admin")
+                {
+                    return StatusCode(
+                        403,
+                        new
+                        {
+                            success = false,
+                            statusCode = 403,
+                            message = "Forbidden. Should log in with admin account."
+                        }
+                    );
+                }
+
+                var result = await this.doctorService.DeleteDoctorById(doctorId);
+
+                if (result != "Succeeded")
+                    return StatusCode(
+                        500,
+                        new
+                        {
+                            success = false,
+                            statusCode = 500,
+                            message = result
+                        }
+                    );
+
+                return Ok(
+                    new
+                    {
+                        succuss = true,
+                        statusCode = 200,
+                        message = "Doctor deleted successfully."
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(
+                    500,
+                    new
+                    {
+                        sucess = false,
+                        statusCode = 500,
+                        message = ex.Message
+                    }
+                );
+            }
+        }
     }
 }

@@ -138,5 +138,41 @@ namespace Infrastructure.Services
 
             return doctors;
         }
+
+        public async Task<string> DeleteDoctorById(string doctorId)
+        {
+            try
+            {
+                ApplicationUser doctor = await this.doctorRepository.FindDoctorById(doctorId);
+
+                if (doctor == null)
+                    return "No doctor found with the given Id";
+
+                List<int> appointmentIds = this.doctorRepository.GetAppointmentsByDoctorId(
+                    doctorId
+                );
+
+                if (appointmentIds.Count == 0)
+                    await this.doctorRepository.DeleteSingleDoctor(doctor);
+
+                List<int> appointmentTimesIds =
+                    this.doctorRepository.GetAppointmentTimeByAppointmentId(appointmentIds);
+
+                bool isDoctorBookd = this.doctorRepository.CheckUserDeletionEligibility(
+                    appointmentTimesIds
+                );
+
+                if (isDoctorBookd)
+                    return "User cannot be deleted. User related to some bookings";
+
+                await this.doctorRepository.DeleteSingleDoctor(doctor);
+
+                return "Succeeded";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
 }
