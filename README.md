@@ -2,7 +2,7 @@
 
 ## Description
 
-🎉 Vezeeta: Streamlining healthcare with easy appointment booking, information access, and efficient CRUD operations for seamless user experience.
+🎉 Vezeeta: Streamlining healthcare with easy appointment booking, information access, and efficient CRUD operations for seamless user experience. 
 
 ## Database Design
 
@@ -10,14 +10,11 @@
   <img src="https://cdn.discordapp.com/attachments/443452026739752960/1183413783276834849/image.png?ex=65883ef8&is=6575c9f8&hm=112fd8b8964eb6815bf9dac89be286153a24f352c2bead1ffa77b7c49103c7d8&" alt="Database design" />
 </div>
 
-## Documentation
-
-- [Api Design](https://algorizainternship.docs.apiary.io/#reference/0/booking/get-all-bookings-for-doctor)
-
 ## Installation
 
 ```bash
 $ git clone https://gitlab.com/MahmoudSerag/algoriza-internship-290.git
+cd Vezzeta-App
 ```
 
 ## Database backup
