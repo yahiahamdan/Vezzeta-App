@@ -45,12 +45,6 @@ $ dotnet ef database update
     "Issuer": "Your-Issuer",
     "Audience": "Your-Audience"
   },
-  "MailSettings": {
-    "RealMail": "sragmahmoud4@gmail.com",
-    "host": "smtp.gmail.com",
-    "Password": "Your Password",
-    "Port": 587
-  }
 }
 ```
 
